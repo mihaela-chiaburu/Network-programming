@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -74,8 +71,6 @@ namespace Server
                 client.Close();
             }
         }
-
-
 
         private void BroadcastMessage(string message, TcpClient sender)
         {

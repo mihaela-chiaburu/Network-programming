@@ -36,3 +36,4 @@ C:\Users\filth\Desktop\an3sem2\pr\Lab1\Client\Client\obj\Debug\net8.0-windows\re
 C:\Users\filth\Desktop\an3sem2\pr\Lab1\Client\Client\obj\Debug\net8.0-windows\Client.pdb
 C:\Users\filth\Desktop\an3sem2\pr\Lab1\Client\Client\obj\Debug\net8.0-windows\Client.genruntimeconfig.cache
 C:\Users\filth\Desktop\an3sem2\pr\Lab1\Client\Client\obj\Debug\net8.0-windows\ref\Client.dll
+C:\Users\filth\Desktop\an3sem2\pr\Lab1\Client\Client\obj\Debug\net8.0-windows\Client.sourcelink.json

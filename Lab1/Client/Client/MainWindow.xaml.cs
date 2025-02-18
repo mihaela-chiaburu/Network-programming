@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -36,21 +37,31 @@ namespace Client
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 MessageBox.Show("Error connecting to server: " + ex.Message, "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
 
         private void ReceiveMessages()
         {
             byte[] buffer = new byte[1024];
             int bytesRead;
 
-            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+            try
             {
-                string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
+                }
+            }
+            catch (IOException ex)
+            {
+                Dispatcher.Invoke(() => DisplayMessage("Server has disconnected unexpectedly.", "Left"));
+                Console.WriteLine("Error: " + ex.Message);
             }
         }
 
