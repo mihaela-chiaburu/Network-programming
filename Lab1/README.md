@@ -1,4 +1,4 @@
-# Chat Server/Client Program
+# TCP Chat Server/Client Program
 
 This is a chat server/client application built with C# that allows clients to connect and send messages to each other.
 
