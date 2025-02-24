@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -64,7 +65,7 @@ namespace Client
                     else if (message.StartsWith("[PRIVATE]"))
                     {
                         string[] parts = message.Split(new[] { '|' }, 2);
-                        string sender = parts[0].Substring(9); // Remove "[PRIVATE]"
+                        string sender = parts[0].Substring(9); // reomve "[PRIVATE]"
                         string privateMessage = parts[1];
                         Dispatcher.Invoke(() => DisplayMessage($"[Private from {sender}]: {privateMessage}", "Left"));
                     }
@@ -77,6 +78,11 @@ namespace Client
                         // general message
                         Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
                     }
+                }
+                catch (IOException ex2)
+                {
+                    Dispatcher.Invoke(() => DisplayMessage("Server has disconnected unexpectedly.", "Left"));
+                    Console.WriteLine("Error: " + ex2.Message);
                 }
                 catch (Exception ex)
                 {

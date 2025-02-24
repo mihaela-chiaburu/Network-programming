@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -74,6 +75,17 @@ namespace Server
                         // general message
                         Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
                         BroadcastMessage(message, remoteEndPoint);
+                    }
+                }
+                catch (IOException ex1)
+                {
+                    //client disconnection
+                    if (clients.ContainsKey(remoteEndPoint))
+                    {
+                        string username = clients[remoteEndPoint];
+                        clients.Remove(remoteEndPoint);
+                        Dispatcher.Invoke(() => DisplayMessage($"{username} has disconnected.", "Left"));
+                        BroadcastUserList();
                     }
                 }
                 catch (Exception ex)
