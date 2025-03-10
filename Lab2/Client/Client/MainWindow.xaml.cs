@@ -17,13 +17,13 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
-            clientIP = GetRandomIpAddress(); 
+
+            clientIP = GetRandomIpAddress();
             clientUsername = $"User{new Random().Next(1000)}";
 
             this.Title = $"Chat Client - {clientIP} ({clientUsername})";
 
             udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(clientIP), Port));
-
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
 
             StartReceiving();
@@ -32,7 +32,7 @@ namespace Client
         private string GetRandomIpAddress()
         {
             Random random = new Random();
-            int lastOctet = random.Next(2, 255); 
+            int lastOctet = random.Next(2, 255);
             return $"127.0.0.{lastOctet}";
         }
 
@@ -91,7 +91,7 @@ namespace Client
                     Text = message,
                     FontSize = 18,
                     Padding = new Thickness(10),
-                    Margin = new Thickness(side == "Right" ? 50 : 20, 5, side == "Left" ? 0 : 20, 5), 
+                    Margin = new Thickness(side == "Right" ? 50 : 20, 5, side == "Left" ? 0 : 20, 5),
                     Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
                     HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
                     TextWrapping = TextWrapping.Wrap,
@@ -119,6 +119,7 @@ namespace Client
                     string userIp = parts[0].Trim();
                     string userMessage = parts[1].Trim();
 
+                    DisplayMessage($"Me (to {userIp}): {userMessage}", "Right");
                     SendMessage(userIp, $"PRIVATE_FROM:{clientIP} ({clientUsername}): {userMessage}");
                 }
             }
