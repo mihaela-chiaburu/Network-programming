@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -13,200 +12,185 @@ namespace Client
     public partial class MainWindow : Window
     {
         private UdpClient udpClient;
-        private IPEndPoint serverEndPoint;
-        private string username;
-        private IPEndPoint selectedUserEndPoint = null;
-        private Dictionary<string, IPEndPoint> userList = new Dictionary<string, IPEndPoint>();
+        private const int Port = 9000;  // Port for UDP
+        private string myIp;  // This will hold the unique virtual IP for the client
+        private string myUsername;  // Random username for the client
 
         public MainWindow()
         {
             InitializeComponent();
-            ConnectToServer();
+
+            // Get the unique IP for the client in the range 127.0.0.1 to 127.0.0.254
+            myIp = GetUniqueIpAddress();  // Use a unique IP for each client (127.0.0.1, 127.0.0.2, etc.)
+
+            // Assign a random username
+            myUsername = $"User{new Random().Next(1000)}";
+
+            // Set the window title to include the client's IP and username
+            this.Title = $"Chat Client - {myIp} ({myUsername})";
+
+            // Create the UDP client and bind it to the unique IP
+            udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(myIp), Port));
+
+            // Allow the socket to receive broadcast messages
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
+
+            // Start listening for incoming messages
+            StartReceiving();
         }
 
-        private void ConnectToServer()
+        private string GetUniqueIpAddress()
         {
-            try
-            {
-                udpClient = new UdpClient();
-                serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 65432);
-                
-                username = "User" + new Random().Next(1000, 9999);
-                this.Title = $"{username} Chat";
-                
-                byte[] nameData = Encoding.ASCII.GetBytes(username);
-                udpClient.Send(nameData, nameData.Length, serverEndPoint);
+            string ipCounterFile = "ip_counter.txt";
+            int clientCounter = 1;
 
-                Thread receiveThread = new Thread(ReceiveMessages);
-                receiveThread.IsBackground = true;
-                receiveThread.Start();
-            }
-            catch (Exception ex)
+            // Use a Mutex to ensure thread-safe access to the file
+            using (Mutex mutex = new Mutex(false, "Global\\IPCounterMutex"))
             {
-                MessageBox.Show("Error connecting to server: " + ex.Message, "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                mutex.WaitOne();  // Wait until it is safe to access the file
+
+                try
+                {
+                    // Read the last assigned IP counter from the file
+                    if (File.Exists(ipCounterFile))
+                    {
+                        string counterText = File.ReadAllText(ipCounterFile);
+                        if (int.TryParse(counterText, out int lastCounter))
+                        {
+                            clientCounter = lastCounter + 1;
+                        }
+                    }
+
+                    // Ensure the counter stays within the valid range (1 to 254)
+                    if (clientCounter > 254)
+                    {
+                        clientCounter = 1;  // Reset to 1 if we exceed 254
+                    }
+
+                    // Write the new counter value back to the file
+                    File.WriteAllText(ipCounterFile, clientCounter.ToString());
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();  // Release the Mutex
+                }
             }
+
+            return $"127.0.0.{clientCounter}";
         }
 
-        private void ReceiveMessages()
+        private async void StartReceiving()
         {
-            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
                 try
                 {
-                    byte[] data = udpClient.Receive(ref remoteEndPoint);
-                    string message = Encoding.ASCII.GetString(data);
+                    UdpReceiveResult result = await udpClient.ReceiveAsync();
+                    string message = Encoding.UTF8.GetString(result.Buffer);
 
-                    if (message.StartsWith("[USERLIST]"))
+                    // Check if the message is a private message
+                    if (message.StartsWith("PRIVATE_FROM:"))
                     {
-                        string[] users = message.Substring(10).Split(',');
-                        Dispatcher.Invoke(() => UpdateUserList(users));
-                    }
-                    else if (message.StartsWith("[PRIVATE]"))
-                    {
-                        string[] parts = message.Split(new[] { '|' }, 2);
-                        string sender = parts[0].Substring(9); // reomve "[PRIVATE]"
-                        string privateMessage = parts[1];
-                        Dispatcher.Invoke(() => DisplayMessage($"[Private from {sender}]: {privateMessage}", "Left"));
-                    }
-                    else if (message.StartsWith("[ERROR]"))
-                    {
-                        Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
+                        // Extract the sender's IP, username, and message
+                        var parts = message.Substring("PRIVATE_FROM:".Length).Split(new[] { ':' }, 2);
+                        if (parts.Length == 2)
+                        {
+                            string senderInfo = parts[0].Trim();
+                            string privateMessage = parts[1].Trim();
+
+                            // Display the private message with the format "private message from ... : message"
+                            DisplayMessage($"private message from {senderInfo}: {privateMessage}");
+                        }
                     }
                     else
                     {
-                        // general message
-                        Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
+                        // Display general messages normally
+                        DisplayMessage(message);
                     }
-                }
-                catch (IOException ex2)
-                {
-                    Dispatcher.Invoke(() => DisplayMessage("Server has disconnected unexpectedly.", "Left"));
-                    Console.WriteLine("Error: " + ex2.Message);
                 }
                 catch (Exception ex)
                 {
-                    Dispatcher.Invoke(() => DisplayMessage("Error receiving message: " + ex.Message, "Left"));
+                    MessageBox.Show($"Error receiving message: {ex.Message}");
                 }
             }
         }
 
-        private void UpdateUserList(string[] users)
+        private void DisplayMessage(string message)
         {
-            ChannelsList.Items.Clear();
-            ChannelsList.Items.Add(new ListBoxItem { Content = "General", Tag = "General" });
-
-            userList.Clear();
-
-            foreach (var user in users)
+            Dispatcher.Invoke(() =>
             {
-                string[] parts = user.Split('|');
-                string username = parts[0];
-                string[] ipParts = parts[1].Split(':');
-                IPAddress ip = IPAddress.Parse(ipParts[0]);
-                int port = int.Parse(ipParts[1]);
-
-                userList[username] = new IPEndPoint(ip, port);
-
-                ChannelsList.Items.Add(new ListBoxItem { Content = username, Tag = username });
-            }
+                // Display the message in the chat window
+                var messageTextBlock = new TextBlock
+                {
+                    Text = message,  // Show the message
+                    Margin = new Thickness(5)
+                };
+                ChatMessagesPanel.Children.Add(messageTextBlock);
+            });
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string message = MessageInput.Text.Trim();
-            if (!string.IsNullOrEmpty(message))
+            string message = MessageInput.Text;
+            if (string.IsNullOrWhiteSpace(message)) return;
+
+            // Prepend the client's unique virtual IP and username to the message
+            string fullMessage = $"{myIp} ({myUsername}): {message}";
+
+            // Check if the message is private
+            if (message.StartsWith("private "))
             {
-                if (selectedUserEndPoint != null)
+                // Extract user IP and message
+                var parts = message.Substring(8).Split(':');
+                if (parts.Length == 2)
                 {
-                    if (ChannelsList.SelectedItem is ListBoxItem selectedItem)
-                    {
-                        string recipientUsername = selectedItem.Content.ToString(); // extract the username
-                        string privateMessage = $"[PRIVATE]{recipientUsername}|{message}";
-                        byte[] data = Encoding.ASCII.GetBytes(privateMessage);
-                        udpClient.Send(data, data.Length, serverEndPoint);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please select a user to send a private message.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    string userIp = parts[0].Trim();
+                    string userMessage = parts[1].Trim();
+
+                    // Send the private message with the prefix "PRIVATE_FROM:"
+                    SendMessage(userIp, $"PRIVATE_FROM:{myIp} ({myUsername}): {userMessage}");
                 }
-                else
-                {
-                    //general message
-                    string fullMessage = username + ": " + message;
-                    byte[] data = Encoding.ASCII.GetBytes(fullMessage);
-                    udpClient.Send(data, data.Length, serverEndPoint);
-                }
-                DisplayMessage("Me: " + message, "Right");
-                MessageInput.Clear();
             }
-        }
-
-        private void DisplayMessage(string message, string side)
-        {
-            TextBlock msgBlock = new TextBlock
+            else
             {
-                Text = message,
-                FontSize = 18,
-                Padding = new Thickness(10),
-                Margin = new Thickness(side == "Right" ? 50 : 0, 5, side == "Left" ? 50 : 0, 5),
-                Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 400
-            };
+                // General message to broadcast address
+                SendMessage("255.255.255.255", fullMessage);  // Broadcast address
+            }
 
-            ChatMessagesPanel.Children.Add(msgBlock);
-            ChatScrollViewer.ScrollToBottom();
+            MessageInput.Clear();
         }
 
-        private void ChannelsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SendMessage(string ip, string message)
         {
             try
             {
-                if (ChannelsList.SelectedItem is ListBoxItem selectedItem)
-                {
-                    string selectedUser = selectedItem.Tag.ToString();
-                    if (selectedUser != "General")
-                    {
-                        if (userList.ContainsKey(selectedUser))
-                        {
-                            selectedUserEndPoint = userList[selectedUser];
-                        }
-                        else
-                        {
-                            MessageBox.Show($"User '{selectedUser}' not found in the user list.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    else
-                    {
-                        selectedUserEndPoint = null; // General chat
-                    }
-                }
+                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), Port);
+                udpClient.Send(buffer, buffer.Length, remoteEndPoint);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error selecting user: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error sending message: {ex.Message}");
             }
         }
 
         private void MessageInput_GotFocus(object sender, RoutedEventArgs e)
         {
             if (MessageInput.Text == "Type your message here...")
-            {
-                MessageInput.Text = "";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Black;
-            }
+                MessageInput.Text = string.Empty;
         }
 
         private void MessageInput_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MessageInput.Text))
-            {
+            if (string.IsNullOrEmpty(MessageInput.Text))
                 MessageInput.Text = "Type your message here...";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Gray;
-            }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // Reset the IP counter file when the application is closed
+            File.WriteAllText("ip_counter.txt", "1");
+            base.OnClosed(e);
         }
     }
 }

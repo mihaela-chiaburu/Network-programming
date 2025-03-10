@@ -25,15 +25,8 @@
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "Client\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml",
-              "RelativeToolTip": "Client\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-02-24T01:04:34.682Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
@@ -43,9 +36,21 @@
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
               "RelativeToolTip": "Client\\MainWindow.xaml.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAAADMAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-24T01:04:32.611Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "Client\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml",
+              "RelativeToolTip": "Client\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-09T23:15:32.038Z",
               "EditorCaption": ""
             }
           ]

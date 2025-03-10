@@ -18,11 +18,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
+              "RelativeToolTip": "Client\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAKwAAAAAAAAAAAAowLYAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T01:04:32.611Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -33,20 +46,7 @@
               "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml",
               "RelativeToolTip": "Client\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-02-24T01:04:34.682Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
-              "RelativeToolTip": "Client\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAAwFUAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-24T01:04:32.611Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-09T23:15:32.038Z"
             }
           ]
         }
