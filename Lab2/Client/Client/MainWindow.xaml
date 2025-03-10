@@ -6,8 +6,8 @@
     <Grid Background="#F8F8F8">
 
         <!-- Chat Messages -->
-        <ScrollViewer Name="ChatScrollViewer" VerticalScrollBarVisibility="Auto" Margin="210,60,10,60">
-            <StackPanel Name="ChatMessagesPanel"/>
+        <ScrollViewer Name="ChatScrollViewer" VerticalScrollBarVisibility="Auto" Margin="0,60,10,60">
+            <StackPanel Name="ChatMessagesPanel" HorizontalAlignment="Stretch"/>
         </ScrollViewer>
 
         <!-- Bottom Input Bar -->

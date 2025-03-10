@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,25 +10,20 @@ namespace Client
     public partial class MainWindow : Window
     {
         private UdpClient udpClient;
-        private const int Port = 9000;  // Port for UDP
-        private string myIp;  // This will hold the unique virtual IP for the client
-        private string myUsername;  // Random username for the client
+        private const int Port = 9000;
+        private string clientIP;
+        private string clientUsername;
 
         public MainWindow()
         {
             InitializeComponent();
+            clientIP = GetRandomIpAddress(); // Generate a random IP address
+            clientUsername = $"User{new Random().Next(1000)}";
 
-            // Get the unique IP for the client in the range 127.0.0.1 to 127.0.0.254
-            myIp = GetUniqueIpAddress();  // Use a unique IP for each client (127.0.0.1, 127.0.0.2, etc.)
-
-            // Assign a random username
-            myUsername = $"User{new Random().Next(1000)}";
-
-            // Set the window title to include the client's IP and username
-            this.Title = $"Chat Client - {myIp} ({myUsername})";
+            this.Title = $"Chat Client - {clientIP} ({clientUsername})";
 
             // Create the UDP client and bind it to the unique IP
-            udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(myIp), Port));
+            udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(clientIP), Port));
 
             // Allow the socket to receive broadcast messages
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
@@ -39,44 +32,12 @@ namespace Client
             StartReceiving();
         }
 
-        private string GetUniqueIpAddress()
+        private string GetRandomIpAddress()
         {
-            string ipCounterFile = "ip_counter.txt";
-            int clientCounter = 1;
-
-            // Use a Mutex to ensure thread-safe access to the file
-            using (Mutex mutex = new Mutex(false, "Global\\IPCounterMutex"))
-            {
-                mutex.WaitOne();  // Wait until it is safe to access the file
-
-                try
-                {
-                    // Read the last assigned IP counter from the file
-                    if (File.Exists(ipCounterFile))
-                    {
-                        string counterText = File.ReadAllText(ipCounterFile);
-                        if (int.TryParse(counterText, out int lastCounter))
-                        {
-                            clientCounter = lastCounter + 1;
-                        }
-                    }
-
-                    // Ensure the counter stays within the valid range (1 to 254)
-                    if (clientCounter > 254)
-                    {
-                        clientCounter = 1;  // Reset to 1 if we exceed 254
-                    }
-
-                    // Write the new counter value back to the file
-                    File.WriteAllText(ipCounterFile, clientCounter.ToString());
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();  // Release the Mutex
-                }
-            }
-
-            return $"127.0.0.{clientCounter}";
+            // Generate a random IP address in the range 127.0.0.2 to 127.0.0.254
+            Random random = new Random();
+            int lastOctet = random.Next(2, 255); // Exclude 127.0.0.1 and 127.0.0.255
+            return $"127.0.0.{lastOctet}";
         }
 
         private async void StartReceiving()
@@ -98,14 +59,32 @@ namespace Client
                             string senderInfo = parts[0].Trim();
                             string privateMessage = parts[1].Trim();
 
-                            // Display the private message with the format "private message from ... : message"
-                            DisplayMessage($"private message from {senderInfo}: {privateMessage}");
+                            // Check if the message is from the current user
+                            if (senderInfo == $"{clientIP} ({clientUsername})")
+                            {
+                                // Display the message as "Me"
+                                DisplayMessage($"Me: {privateMessage}", "Right");
+                            }
+                            else
+                            {
+                                // Display the private message with the format "private message from ... : message"
+                                DisplayMessage($"private message from {senderInfo}: {privateMessage}", "Left");
+                            }
                         }
                     }
                     else
                     {
-                        // Display general messages normally
-                        DisplayMessage(message);
+                        // Check if the message is from the current user
+                        if (message.StartsWith($"{clientIP} ({clientUsername}):"))
+                        {
+                            // Display the message as "Me"
+                            DisplayMessage($"Me: {message.Substring($"{clientIP} ({clientUsername}):".Length).Trim()}", "Right");
+                        }
+                        else
+                        {
+                            // Display general messages normally
+                            DisplayMessage(message, "Left");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -115,17 +94,28 @@ namespace Client
             }
         }
 
-        private void DisplayMessage(string message)
+        private void DisplayMessage(string message, string side)
         {
             Dispatcher.Invoke(() =>
             {
-                // Display the message in the chat window
-                var messageTextBlock = new TextBlock
+                // Create a TextBlock for the message
+                TextBlock msgBlock = new TextBlock
                 {
-                    Text = message,  // Show the message
-                    Margin = new Thickness(5)
+                    Text = message,
+                    FontSize = 18,
+                    Padding = new Thickness(10),
+                    Margin = new Thickness(side == "Right" ? 50 : 20, 5, side == "Left" ? 0 : 20, 5), // Adjust margins
+                    Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
+                    HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
+                    TextWrapping = TextWrapping.Wrap,
+                    MaxWidth = 400
                 };
-                ChatMessagesPanel.Children.Add(messageTextBlock);
+
+                // Add the message to the chat window
+                ChatMessagesPanel.Children.Add(msgBlock);
+
+                // Scroll to the bottom of the chat window
+                ChatScrollViewer.ScrollToBottom();
             });
         }
 
@@ -135,7 +125,7 @@ namespace Client
             if (string.IsNullOrWhiteSpace(message)) return;
 
             // Prepend the client's unique virtual IP and username to the message
-            string fullMessage = $"{myIp} ({myUsername}): {message}";
+            string fullMessage = $"{clientIP} ({clientUsername}): {message}";
 
             // Check if the message is private
             if (message.StartsWith("private "))
@@ -148,7 +138,7 @@ namespace Client
                     string userMessage = parts[1].Trim();
 
                     // Send the private message with the prefix "PRIVATE_FROM:"
-                    SendMessage(userIp, $"PRIVATE_FROM:{myIp} ({myUsername}): {userMessage}");
+                    SendMessage(userIp, $"PRIVATE_FROM:{clientIP} ({clientUsername}): {userMessage}");
                 }
             }
             else
@@ -157,6 +147,7 @@ namespace Client
                 SendMessage("255.255.255.255", fullMessage);  // Broadcast address
             }
 
+            // Clear the input box
             MessageInput.Clear();
         }
 
@@ -184,13 +175,6 @@ namespace Client
         {
             if (string.IsNullOrEmpty(MessageInput.Text))
                 MessageInput.Text = "Type your message here...";
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            // Reset the IP counter file when the application is closed
-            File.WriteAllText("ip_counter.txt", "1");
-            base.OnClosed(e);
         }
     }
 }
