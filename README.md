@@ -1,57 +1,63 @@
-# Network Programming Labs
+### Networking Programming Assignments
 
-This repository contains labs for understanding network programming. Below are the descriptions and links to the labs:
+This repository contains lab work for the **Network Programming** course, using **C#** and **.NET**.
 
-## Lab #1: Chat Application Using TCP
+---
+
+### Assignments Overview
+
+#### **TCP Chat Application (Assignment #1)**
 [Link to Lab #1](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab1)
 
-### Objective:
-- Understand how to create a socket.
-- Understand how a TCP server starts listening for connections on a port.
-- Understand how to receive data through a socket.
-- Understand how to send data through a socket.
-- Learn how to handle multiple clients simultaneously.
-- Learn how to properly close a connection from both the client and server side.
+**Objective:**
+- Develop a chat application using **TCP**.
+- Learn how to handle connections and communication over TCP.
+- Understand how to create and manage a server that can handle multiple clients concurrently.
+- Implement client-server communication for message exchange.
 
-### Description:
-In this lab, you need to create two console applications:
-1. A server application that listens for incoming connections on a specific port.
-2. A client application that connects to the server and sends messages.
+**Description:**
+In this assignment, you'll create a **TCP-based chat application** consisting of two parts:
+1. A **server application** that listens for incoming connections on a specified port.
+2. A **client application** that connects to the server and sends messages.
 
-The client application will ask the user to input a text message, which will then be sent to the server. The server will display this message and broadcast it to all connected clients, including the one who sent the message.
-Clients can send multiple messages, and the server will handle them and display them on all connected clients' screens.
-
-### Evaluation Criteria:
-- The server and client are created and can connect to the server (5 points).
-- The server can accept multiple clients concurrently (1 point).
-- The client can send messages to the server, and the server displays the message in its window (1 point).
-- The server can broadcast messages to all clients (1 point).
-- Clients are able to display received messages (1 point).
-- Proper connection, disconnection, and data transmission without critical exceptions (1 point).
+The server will display the messages it receives and broadcast them to all connected clients. Each client can send and receive messages, while the server ensures all clients are updated with the latest messages.
 
 ---
 
-## Lab #2: Chat Application Using UDP
+#### **UDP Chat Application (Assignment #2)**
 [Link to Lab #2](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab2)
 
-### Objective:
-- Understand how to create a UDP socket.
-- Understand how to send UDP messages.
-- Understand how to receive UDP messages.
-- Understand how to send broadcast messages.
+**Objective:**
+- Implement a chat application utilizing **UDP**.
+- Understand the differences in communication when using UDP compared to TCP.
+- Learn how to handle both multicast and unicast UDP messages.
+- Explore how to create private channels alongside a general chat channel.
 
-### Description:
-In this lab, you need to create a chat application that works within a network segment. The chat will have a general channel where multicast messages will be received and displayed to all participants. Additionally, the application will allow private conversations between participants, which will not be displayed in the general channel.
-Clients can send and receive both public (general channel) and private messages.
+**Description:**
+For this assignment, you will create a **UDP-based chat application**. This application will allow:
+1. **Multicast communication** for public (general) messages.
+2. **Private unicast communication** between specific clients.
 
-### Evaluation Criteria:
-- A UDP socket capable of transmitting and receiving messages is created (1 point).
-- The client can send messages to a specific IP address (2 points).
-- The client can receive messages from a specific IP address (2 points).
-- The client can send messages to the general channel (2 points).
-- The client can receive and display messages from the general channel (2 points).
-- Exceptions in data transmission are handled properly (1 point).
+Participants will send and receive messages in both public and private channels. Messages sent to the general channel will be visible to all participants, while private messages are only visible to the intended recipient.
 
 ---
 
-This README provides an overview of the network programming labs, highlighting the objectives and evaluation criteria for each lab. You can visit the provided links to access the full labs and their source code.
+#### **DNS Client Application (Assignment #3)**
+[Link to Lab #3](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab3)
+
+**Objective:**
+- Create a client application that performs **DNS queries**.
+- Learn about the domain name resolution process and how to query DNS servers.
+- Implement a feature to switch between custom DNS servers.
+
+**Description:**
+In this assignment, you will build a **DNS client application** that:
+1. Resolves **domain names to IP addresses** and vice versa.
+2. Allows the user to **change the DNS server** used for querying domain names.
+3. Displays appropriate error messages if DNS resolution fails or if an invalid DNS server is specified.
+
+The application will support both forward and reverse DNS lookups and will enable the user to configure a custom DNS server for queries.
+
+---
+
+This repository provides practical assignments for learning network programming concepts and implementing solutions in C# and .NET. Each assignment includes objectives, descriptions, and evaluation criteria to help you track your progress and proficiency in network programming.
