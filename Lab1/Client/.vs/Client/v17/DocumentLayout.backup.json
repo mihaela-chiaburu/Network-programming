@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab1\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\filth\\desktop\\an3sem2\\pr\\lab1\\client\\client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\filth\\desktop\\an3sem2\\pr\\lab1\\client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\filth\\desktop\\an3sem2\\pr\\lab1\\client\\client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,20 +26,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab1\\Client\\Client\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab1\\Client\\Client\\MainWindow.xaml.cs",
               "RelativeToolTip": "Client\\MainWindow.xaml.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwIIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwDwAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-16T23:08:59.812Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab1\\Client\\Client\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml",
