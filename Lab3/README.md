@@ -2,6 +2,11 @@
 
 This is a DNS client application built with C# that allows users to resolve domain names to IP addresses and vice versa, and to configure a custom DNS server for queries. The application can resolve domain names, check the IP addresses associated with a given domain, and use a custom DNS server for making DNS queries.
 
+<div style="text-align: center; border: 10px solid black; display: inline-block;">
+    <img src="https://github.com/user-attachments/assets/e533aa75-0beb-4d82-8843-695069cf583d" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+    <p><em>Interface of the app</em></p>
+</div>
+
 ## Requirements
 
 - Windows operating system
@@ -11,7 +16,7 @@ This is a DNS client application built with C# that allows users to resolve doma
 
 1. Download the files from the repository (either by cloning or downloading the ZIP).
 2. Open the project in Visual Studio and build the solution.
-3. Run the application by pressing `F5` or by double-clicking the executable file (`DNS_Client.exe`).
+3. Run the application by pressing `F5` or by double-clicking the executable file (`DNS_Client.exe`) by navigating to `DNS_Client/bin/Debug/net8.0-windows`.
 4. In the application, you can enter a domain name or IP address in the "Resolve" input box and click the "Resolve" button to resolve it.
 5. To use a custom DNS server, enter the DNS server address in the "DNS Server" input box and click the "Use DNS" button.
 
