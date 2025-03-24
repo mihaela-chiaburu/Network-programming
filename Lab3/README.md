@@ -2,8 +2,8 @@
 
 This is a DNS client application built with C# that allows users to resolve domain names to IP addresses and vice versa, and to configure a custom DNS server for queries. The application can resolve domain names, check the IP addresses associated with a given domain, and use a custom DNS server for making DNS queries.
 
-<div style="text-align: center; border: 10px solid black; display: inline-block;">
-    <img src="https://github.com/user-attachments/assets/e533aa75-0beb-4d82-8843-695069cf583d" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+<div style="text-align: center; border: 10px solid black; display: inline-block; padding: 10px;">
+    <img src="https://github.com/user-attachments/assets/e533aa75-0beb-4d82-8843-695069cf583d" style="max-width: 90%; height: auto; display: block; margin: 0 auto;">
     <p><em>Interface of the app</em></p>
 </div>
 
