@@ -1,0 +1,57 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab3\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B0E140C3-D40C-462F-AC6D-AEF377CD0485}|DNS_Client\\DNS_Client.csproj|c:\\users\\filth\\desktop\\an3sem2\\pr\\lab3\\dns_client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0E140C3-D40C-462F-AC6D-AEF377CD0485}|DNS_Client\\DNS_Client.csproj|solutionrelative:dns_client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0E140C3-D40C-462F-AC6D-AEF377CD0485}|DNS_Client\\DNS_Client.csproj|c:\\users\\filth\\desktop\\an3sem2\\pr\\lab3\\dns_client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B0E140C3-D40C-462F-AC6D-AEF377CD0485}|DNS_Client\\DNS_Client.csproj|solutionrelative:dns_client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab3\\DNS_Client\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "DNS_Client\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab3\\DNS_Client\\MainWindow.xaml.cs",
+              "RelativeToolTip": "DNS_Client\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T08:13:04.055Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab3\\DNS_Client\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "DNS_Client\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab3\\DNS_Client\\MainWindow.xaml",
+              "RelativeToolTip": "DNS_Client\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-24T08:13:01.555Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
