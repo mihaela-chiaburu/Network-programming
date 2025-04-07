@@ -1,0 +1,12 @@
+﻿@model OnlineStore.Models.Category
+
+<h2>Create Category</h2>
+
+<form asp-action="Create">
+    <div class="mb-3">
+        <label for="Title" class="form-label">Title</label>
+        <input type="text" asp-for="Title" class="form-control" id="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+</form>

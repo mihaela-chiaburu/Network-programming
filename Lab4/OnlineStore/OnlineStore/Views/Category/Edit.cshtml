@@ -1,0 +1,13 @@
+﻿@model OnlineStore.Models.Category
+
+<h2>Edit Category</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label for="Title" class="form-label">Title</label>
+        <input type="text" asp-for="Title" class="form-control" id="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-warning">Update</button>
+</form>

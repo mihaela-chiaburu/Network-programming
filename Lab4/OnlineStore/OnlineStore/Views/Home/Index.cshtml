@@ -1,0 +1,27 @@
+﻿@model IEnumerable<OnlineStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4 mb-5">
+    <h2 class="mb-4">Latest Products</h2>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@Url.Content("~/img/cat_placeholder.jpg")" class="card-img-top w-100" style="height: 180px; object-fit: cover;" alt="@product.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text text-muted">$@product.Price</p>
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
