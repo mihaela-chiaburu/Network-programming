@@ -39,8 +39,10 @@ namespace OnlineStore.Controllers
 
             _context.Products.Add(product);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
+
 
         public IActionResult Edit(int id)
         {

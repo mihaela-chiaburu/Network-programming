@@ -7,6 +7,13 @@
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text"><strong>Price:</strong> $@Model.Price</p>
         <p class="card-text"><strong>Category:</strong> @Model.Category?.Title</p>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <div class="mt-4">
+                <h6>Description:</h6>
+                <p class="card-text">@Model.Description</p>
+            </div>
+        }
     </div>
 </div>
 

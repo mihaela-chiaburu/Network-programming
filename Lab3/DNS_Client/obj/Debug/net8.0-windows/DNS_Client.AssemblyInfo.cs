@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DNS_Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+511ae8c29a0b12bf09b14fc0152f8e30cbdda22c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b69db06e75ad78ba22ee529f34c7fcce75d5514")]
 [assembly: System.Reflection.AssemblyProductAttribute("DNS_Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DNS_Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

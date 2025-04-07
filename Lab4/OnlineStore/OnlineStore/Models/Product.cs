@@ -11,6 +11,7 @@ namespace OnlineStore.Models
         public int CategoryId { get; set; }
         [ValidateNever]
         public Category Category { get; set; }
+        public string Description { get; set; }
     }
 
 }
