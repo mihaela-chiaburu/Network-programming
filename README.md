@@ -61,7 +61,7 @@ The application will support both forward and reverse DNS lookups and will enabl
 ---
 
 #### **Online Store HTTP Application (Assignment #4)**
-[Link to Lab #4](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab4)
+[Link to Lab #4](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab4/OnlineStore)
 
 **Objective:**
 - Understanding how to make http requests
