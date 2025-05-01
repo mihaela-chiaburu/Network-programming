@@ -60,23 +60,26 @@ The application will support both forward and reverse DNS lookups and will enabl
 
 ---
 
-#### **Online Store HTTP Application (Assignment #4)**
-[Link to Lab #4](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab4/OnlineStore)
+#### **HTTP Categories Manager Application (Assignment #4)**  
+[Link to Lab #4](https://github.com/mihaela-chiaburu/Network-programming/tree/master/Lab4)
 
-**Objective:**
-- Understanding how to make http requests
-- Understanding how to serialize objects
-- Understanding how to use the http client
+**Objective:**  
+- Understand how to make HTTP requests  
+- Learn to serialize and deserialize objects  
+- Use `HttpClient` for client-server communication  
 
-**Description:**
-In this assignment, I will create a **web-based online store** application that enables users to:
-1. **Manage categories** (add, edit, delete).
-2. **View product details** and list products within a category.
-3. **Upload images** for products.
-4. Perform **CRUD operations** on categories and products, such as creating, updating, and deleting them.
+**Description:**  
+In this assignment, I created an application that manages **categories** and **products** using HTTP communication with a backend server. The app performs the following operations:
 
-The application will utilize **HTTP requests** to interact with a backend server and will save product and category information to a database. Users will be able to view a list of categories, see products under each category, and manage their data efficiently.
+1. **Display a list of categories**  
+2. **Show category details**  
+3. **Create a new category**  
+4. **Delete a category**  
+5. **Edit the title of a category**  
+6. **Add new products to a category**  
+7. **Display the list of products within a category**
 
+All operations are implemented using HTTP requests, and the data is handled through JSON serialization. This project helped me understand how to build and consume RESTful APIs using C#.
 
 ---
 
