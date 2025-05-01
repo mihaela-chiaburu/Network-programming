@@ -1,0 +1,132 @@
+﻿<Window x:Class="EmailClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmailClient"
+        mc:Ignorable="d"
+        Title="Email Client" Height="600" Width="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel -->
+        <StackPanel Grid.Column="0" Background="#f5f5f5">
+            <Button Content="Compose" Margin="10" Padding="10" FontWeight="Bold" Click="ComposeButton_Click"/>
+
+            <Separator Margin="5"/>
+
+            <TextBlock Text="Inbox" Margin="10,5,10,0" FontWeight="Bold"/>
+            <RadioButton x:Name="pop3Radio" Content="POP3" Margin="20,5,10,5" GroupName="Protocol" IsChecked="True"/>
+            <RadioButton x:Name="imapRadio" Content="IMAP" Margin="20,5,10,5" GroupName="Protocol"/>
+            <Button Content="Refresh" Margin="10" Padding="5" Click="RefreshButton_Click"/>
+
+            <Separator Margin="5"/>
+
+            <TextBlock Text="Settings" Margin="10,5,10,0" FontWeight="Bold"/>
+            <TextBlock Text="Email:" Margin="10,5,10,0"/>
+            <TextBox x:Name="emailTextBox" Margin="10,0,10,5"/>
+            <TextBlock Text="Password:" Margin="10,5,10,0"/>
+            <PasswordBox x:Name="passwordBox" Margin="10,0,10,5"/>
+            <TextBlock Text="SMTP Server:" Margin="10,5,10,0"/>
+            <TextBox x:Name="smtpServerTextBox" Margin="10,0,10,5" Text="smtp.gmail.com"/>
+            <TextBlock Text="SMTP Port:" Margin="10,5,10,0"/>
+            <TextBox x:Name="smtpPortTextBox" Margin="10,0,10,5" Text="587"/>
+            <TextBlock Text="POP3 Server:" Margin="10,5,10,0"/>
+            <TextBox x:Name="pop3ServerTextBox" Margin="10,0,10,5" Text="pop.gmail.com"/>
+            <TextBlock Text="POP3 Port:" Margin="10,5,10,0"/>
+            <TextBox x:Name="pop3PortTextBox" Margin="10,0,10,5" Text="995"/>
+            <TextBlock Text="IMAP Server:" Margin="10,5,10,0"/>
+            <TextBox x:Name="imapServerTextBox" Margin="10,0,10,5" Text="imap.gmail.com"/>
+            <TextBlock Text="IMAP Port:" Margin="10,5,10,0"/>
+            <TextBox x:Name="imapPortTextBox" Margin="10,0,10,5" Text="993"/>
+        </StackPanel>
+
+        <!-- Right Panel -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Email List -->
+            <ListView x:Name="emailsListView" Grid.Row="0" SelectionChanged="EmailsListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="From" DisplayMemberBinding="{Binding From}" Width="150"/>
+                        <GridViewColumn Header="Subject" DisplayMemberBinding="{Binding Subject}" Width="200"/>
+                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="120"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <!-- Email Content -->
+            <Grid x:Name="emailContentGrid" Grid.Row="0" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding SelectedEmail.From}" Margin="10,10,10,0" FontWeight="Bold"/>
+                <TextBlock Grid.Row="1" Text="{Binding SelectedEmail.Subject}" Margin="10,5,10,0" FontWeight="Bold"/>
+                <TextBlock Grid.Row="2" Text="{Binding SelectedEmail.Date}" Margin="10,5,10,0"/>
+                <WebBrowser x:Name="emailWebBrowser" Grid.Row="3" Margin="10"/>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Content="Download Attachments" Click="DownloadAttachments_Click" Margin="0,0,10,0"/>
+                    <Button Content="Reply" Click="ReplyButton_Click" Margin="0,0,10,0"/>
+                    <Button Content="Close" Click="CloseEmailButton_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Compose Email -->
+            <Grid x:Name="composeEmailGrid" Grid.Row="0" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="To:" Width="50" VerticalAlignment="Center"/>
+                    <TextBox x:Name="toTextBox" Width="300"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Subject:" Width="50" VerticalAlignment="Center"/>
+                    <TextBox x:Name="subjectTextBox" Width="300"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Reply-To:" Width="50" VerticalAlignment="Center"/>
+                    <TextBox x:Name="replyToTextBox" Width="300"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Attachments:" Width="50" VerticalAlignment="Center"/>
+                    <Button Content="Add Attachment" Click="AddAttachment_Click" Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <TextBox x:Name="bodyTextBox" Grid.Row="4" Margin="10" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Content="Send" Click="SendButton_Click" Margin="0,0,10,0" Width="80"/>
+                    <Button Content="Cancel" Click="CancelComposeButton_Click" Width="80"/>
+                </StackPanel>
+            </Grid>
+
+            <StatusBar Grid.Row="1">
+                <StatusBarItem>
+                    <TextBlock x:Name="statusTextBlock" Text="Ready"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>
