@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTPClientApp", "NTPClientApp\NTPClientApp.csproj", "{59AEC6EC-378A-4165-B249-1DCB3C033F63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59AEC6EC-378A-4165-B249-1DCB3C033F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59AEC6EC-378A-4165-B249-1DCB3C033F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59AEC6EC-378A-4165-B249-1DCB3C033F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59AEC6EC-378A-4165-B249-1DCB3C033F63}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA3D7B84-AE62-4AD4-AE1F-23F48113E428}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,11 @@
+﻿<Window x:Class="NTPClientApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NTP Client" Height="250" Width="400">
+    <Grid>
+        <Label Content="Introdu zona geografică (ex: GMT+2)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+        <TextBox x:Name="ZoneTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" Width="150"/>
+        <Button Content="Obține Ora" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,40,0,0" Width="100" Click="OnGetTimeClick"/>
+        <Label x:Name="TimeLabel" Content="Ora exactă va apărea aici" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0" Width="350"/>
+    </Grid>
+</Window>

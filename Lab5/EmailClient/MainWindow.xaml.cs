@@ -31,7 +31,6 @@ namespace EmailClient
             emailContentGrid.Visibility = Visibility.Collapsed;
             composeEmailGrid.Visibility = Visibility.Visible;
 
-            // Pre-fill the reply-to with the user's email
             replyToTextBox.Text = emailTextBox.Text;
         }
 
@@ -59,7 +58,6 @@ namespace EmailClient
                     await LoadEmailsViaImap();
                 }
 
-                // Display emails in list view
                 var emailList = emailMessages.Select(m => new
                 {
                     From = m.From.ToString(),
@@ -109,12 +107,12 @@ namespace EmailClient
                 var inbox = client.Inbox;
                 await inbox.OpenAsync(FolderAccess.ReadOnly);
 
-                // Obține doar ultimele 15 email-uri (cele mai recente)
-                var count = Math.Min(inbox.Count, 15); // Nu încerca să accesezi mai multe decât există
+                // doar ultimele 15 email-uri 
+                var count = Math.Min(inbox.Count, 15); 
                 var uids = await inbox.SearchAsync(SearchQuery.All);
-                var latestUids = uids.TakeLast(count).Reverse().ToList(); // Cele mai recente 15 email-uri
+                var latestUids = uids.TakeLast(count).Reverse().ToList(); 
 
-                emailMessages.Clear(); // Șterge lista veche
+                emailMessages.Clear();
 
                 foreach (var uid in latestUids)
                 {
@@ -133,7 +131,7 @@ namespace EmailClient
             dynamic selectedItem = emailsListView.SelectedItem;
             var selectedMessage = (MimeMessage)selectedItem.Message;
 
-            // Display email content
+            // Display email
             emailContentGrid.DataContext = new
             {
                 SelectedEmail = new
@@ -144,7 +142,7 @@ namespace EmailClient
                 }
             };
 
-            // Display HTML or plain text body
+            // Display HTML
             var html = selectedMessage.HtmlBody;
             if (!string.IsNullOrEmpty(html))
             {
@@ -217,7 +215,6 @@ namespace EmailClient
 
                 smtpClient.Send(mailMessage);
 
-                // Clear compose fields
                 toTextBox.Clear();
                 subjectTextBox.Clear();
                 bodyTextBox.Clear();
@@ -242,7 +239,6 @@ namespace EmailClient
             emailContentGrid.Visibility = Visibility.Collapsed;
             composeEmailGrid.Visibility = Visibility.Collapsed;
 
-            // Clear compose fields
             toTextBox.Clear();
             subjectTextBox.Clear();
             bodyTextBox.Clear();
@@ -256,12 +252,11 @@ namespace EmailClient
             dynamic selectedItem = emailsListView.SelectedItem;
             var selectedMessage = (MimeMessage)selectedItem.Message;
 
-            // Switch to compose view
             emailsListView.Visibility = Visibility.Collapsed;
             emailContentGrid.Visibility = Visibility.Collapsed;
             composeEmailGrid.Visibility = Visibility.Visible;
 
-            // Pre-fill the fields for reply
+            // Pre-fill reply
             toTextBox.Text = selectedMessage.From.ToString();
             subjectTextBox.Text = $"Re: {selectedMessage.Subject}";
             replyToTextBox.Text = emailTextBox.Text;
@@ -279,8 +274,8 @@ namespace EmailClient
             var dialog = new Microsoft.Win32.SaveFileDialog
             {
                 Title = "Select folder to save attachments",
-                FileName = "SelectFolder", // Dummy filename
-                Filter = "Folders|*.thisisnotafile", // Doesn't matter what filter you use
+                FileName = "SelectFolder",
+                Filter = "Folders|*.thisisnotafile",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 CheckFileExists = false,
                 CheckPathExists = true

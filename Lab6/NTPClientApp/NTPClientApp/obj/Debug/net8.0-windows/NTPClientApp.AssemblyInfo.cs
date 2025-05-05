@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("EmailClient")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("NTPClientApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53af048eb3d48e1bfb26bdf18f563e0d0e74fe47")]
-[assembly: System.Reflection.AssemblyProductAttribute("EmailClient")]
-[assembly: System.Reflection.AssemblyTitleAttribute("EmailClient")]
+[assembly: System.Reflection.AssemblyProductAttribute("NTPClientApp")]
+[assembly: System.Reflection.AssemblyTitleAttribute("NTPClientApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
