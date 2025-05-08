@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UtmShop")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33c16d74562f39f603dce00e8f388d2b32eda7e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("UtmShop")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UtmShop")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1602,11 +1602,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\filth\\Desktop\\UtmShop\\UtmShop.csproj",
+      "projectUniqueName": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab4\\UtmShop\\UtmShop.csproj",
       "projectName": "UtmShop",
-      "projectPath": "C:\\Users\\filth\\Desktop\\UtmShop\\UtmShop.csproj",
+      "projectPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab4\\UtmShop\\UtmShop.csproj",
       "packagesPath": "C:\\Users\\filth\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\filth\\Desktop\\UtmShop\\obj\\",
+      "outputPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab4\\UtmShop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\filth\\AppData\\Roaming\\NuGet\\NuGet.Config",
