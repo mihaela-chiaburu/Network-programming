@@ -2,6 +2,9 @@
 
 This is a UDP chat application built with C# that allows multiple clients to connect and send messages to each other. There is no server component in this application; all clients communicate directly with each other using UDP.
 
+<img width="1919" height="1015" alt="Screenshot 2025-08-21 230952" src="https://github.com/user-attachments/assets/0d4c3471-62a3-4f05-914e-fbb2da8d2eca" />
+
+
 ## Requirements
 
 - Windows operating system
