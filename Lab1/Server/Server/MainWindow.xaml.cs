@@ -1,124 +1,127 @@
-﻿using System.IO;
+﻿using Server.Constants;
+using Server.Interfaces;
+using Server.Services;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Server
 {
     public partial class MainWindow : Window
     {
-        private TcpListener server;
-        private List<TcpClient> clients = new List<TcpClient>();
-        private bool isRunning = true;
+        private readonly IChatServerService _serverService;
+        private readonly IMessageDisplayService _messageDisplayService;
 
-        public MainWindow()
+        public MainWindow() : this(new TcpChatServerService(), new MessageDisplayService())
+        {
+        }
+
+        public MainWindow(IChatServerService serverService, IMessageDisplayService messageDisplayService)
         {
             InitializeComponent();
+            _serverService = serverService;
+            _messageDisplayService = messageDisplayService;
+
+            InitializeServices();
             StartServer();
         }
 
-        private void StartServer()
+        private void InitializeServices()
         {
-            server = new TcpListener(IPAddress.Any, 65432);
-            server.Start();
-            Thread serverThread = new Thread(AcceptClients);
-            serverThread.IsBackground = true;
-            serverThread.Start();
+            _serverService.MessageReceived += OnMessageReceived;
+            _serverService.ClientJoined += OnClientJoined;
+            _serverService.ClientDisconnected += OnClientDisconnected;
+            _serverService.ServerStatusChanged += OnServerStatusChanged;
         }
 
-        private void AcceptClients()
+        private async void StartServer()
         {
-            while (isRunning)
-            {
-                TcpClient client = server.AcceptTcpClient();
-                clients.Add(client);
-                Thread clientThread = new Thread(() => HandleClient(client));
-                clientThread.IsBackground = true;
-                clientThread.Start();
-            }
-        }
-
-        private void HandleClient(TcpClient client)
-        {
-            NetworkStream stream = client.GetStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-
             try
             {
-                bytesRead = stream.Read(buffer, 0, buffer.Length);
-                string username = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-
-                Dispatcher.Invoke(() => DisplayMessage(username + " joined the chat.", "Left"));
-
-                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
-                    BroadcastMessage(message, client);
-                }
+                await _serverService.StartAsync();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
-                Dispatcher.Invoke(() => DisplayMessage("A client has disconnected unexpectedly.", "Left"));
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            finally
-            {
-                clients.Remove(client);
-                client.Close();
+                MessageBox.Show(
+                    AppConstants.Messages.SERVER_START_ERROR + ex.Message,
+                    AppConstants.Titles.SERVER_ERROR,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
-        private void BroadcastMessage(string message, TcpClient sender)
+        private void OnMessageReceived(string message)
         {
-            byte[] data = Encoding.ASCII.GetBytes(message);
-            foreach (var client in clients)
-            {
-                if (client != sender)
-                {
-                    client.GetStream().Write(data, 0, data.Length);
-                }
-            }
+            Dispatcher.Invoke(() => _messageDisplayService.DisplayMessage(message, false, ChatMessagesPanel, ChatScrollViewer));
         }
 
-        private void DisplayMessage(string message, string side)
+        private void OnClientJoined(string message)
         {
-            TextBlock msgBlock = new TextBlock
-            {
-                Text = message,
-                FontSize = 18,
-                Padding = new Thickness(10),
-                Margin = new Thickness(side == "Right" ? 50 : 0, 5, side == "Left" ? 50 : 0, 5),
-                Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 400
-            };
+            Dispatcher.Invoke(() => _messageDisplayService.DisplaySystemMessage(message, ChatMessagesPanel, ChatScrollViewer));
+        }
 
-            ChatMessagesPanel.Children.Add(msgBlock);
-            ChatScrollViewer.ScrollToBottom();
+        private void OnClientDisconnected(string message)
+        {
+            Dispatcher.Invoke(() => _messageDisplayService.DisplaySystemMessage(message, ChatMessagesPanel, ChatScrollViewer));
+        }
+
+        private void OnServerStatusChanged(string status)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _messageDisplayService.DisplaySystemMessage($"Server Status: {status}", ChatMessagesPanel, ChatScrollViewer);
+                Console.WriteLine($"Server Status: {status}");
+            });
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string message = MessageInput.Text.Trim();
-            if (!string.IsNullOrEmpty(message))
+            if (!_serverService.IsRunning)
             {
-                DisplayMessage(message, "Right");
-                BroadcastMessage(message, null);
-                MessageInput.Clear();
+                MessageBox.Show(
+                    "Server is not running.",
+                    AppConstants.Titles.SERVER_ERROR,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            string message = MessageInput.Text.Trim();
+            if (!string.IsNullOrEmpty(message) && message != AppConstants.UI.PLACEHOLDER_TEXT)
+            {
+                try
+                {
+                    _messageDisplayService.DisplayMessage(
+                        AppConstants.UI.SERVER_PREFIX + message,
+                        true,
+                        ChatMessagesPanel,
+                        ChatScrollViewer);
+
+                    _serverService.BroadcastFromServer(message);
+                    MessageInput.Clear();
+                    MessageInput.Focus();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "Error sending message: " + ex.Message,
+                        AppConstants.Titles.SERVER_ERROR,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
             }
         }
 
         private void MessageInput_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (MessageInput.Text == "Type your message here...")
+            if (MessageInput.Text == AppConstants.UI.PLACEHOLDER_TEXT)
             {
                 MessageInput.Text = "";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Black;
+                MessageInput.Foreground = Brushes.Black;
             }
         }
 
@@ -126,9 +129,17 @@ namespace Server
         {
             if (string.IsNullOrWhiteSpace(MessageInput.Text))
             {
-                MessageInput.Text = "Type your message here...";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Gray;
+                MessageInput.Text = AppConstants.UI.PLACEHOLDER_TEXT;
+                MessageInput.Foreground = Brushes.Gray;
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _serverService?.StopAsync().Wait();
+            if (_serverService is IDisposable disposable)
+                disposable.Dispose();
+            base.OnClosed(e);
         }
     }
 }

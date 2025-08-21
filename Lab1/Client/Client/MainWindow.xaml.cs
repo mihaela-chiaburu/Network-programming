@@ -1,120 +1,110 @@
-﻿using System;
+﻿using Client.Constants;
+using Client.Interfaces;
+using Client.Services;
+using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Client
 {
     public partial class MainWindow : Window
     {
-        private TcpClient client;
-        private NetworkStream stream;
+        private readonly IChat _chat;
+        private readonly IMessageDisplay _messageDisplay;
 
-        public MainWindow()
+        public MainWindow() : this(new TcpChatService(), new MessageDisplayService())
+        {
+        }
+
+        public MainWindow(IChat chatService, IMessageDisplay messageDisplayService)
         {
             InitializeComponent();
+            _chat = chatService;
+            _messageDisplay = messageDisplayService;
+
+            InitializeServices();
             ConnectToServer();
         }
 
-        private string username;
-
-        private void ConnectToServer()
+        private void InitializeServices()
         {
-            try
-            {
-                client = new TcpClient();
-                client.Connect("127.0.0.1", 65432);
-                stream = client.GetStream();
+            _chat.MessageReceived += OnMessageReceived;
+            _chat.ConnectionStatusChanged += OnConnectionStatusChanged;
+        }
 
-                username = "User" + new Random().Next(1000, 9999);
-                byte[] nameData = Encoding.ASCII.GetBytes(username);
-                stream.Write(nameData, 0, nameData.Length);
-
-                Thread receiveThread = new Thread(ReceiveMessages);
-                receiveThread.IsBackground = true;
-                receiveThread.Start();
-            }
-            catch (IOException ex)
+        private async void ConnectToServer()
+        {
+            var connected = await _chat.ConnectAsync();
+            if (!connected)
             {
-                MessageBox.Show("Error connecting to server: " + ex.Message, "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    AppConstants.Messages.CONNECTION_ERROR,
+                    AppConstants.Messages.CONNECTION_ERROR_TITLE,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
-
-
-        private void ReceiveMessages()
+        private void OnMessageReceived(string message)
         {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-
-            try
-            {
-                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Dispatcher.Invoke(() => DisplayMessage(message, "Left"));
-                }
-            }
-            catch (IOException ex)
-            {
-                Dispatcher.Invoke(() => DisplayMessage("Server has disconnected unexpectedly.", "Left"));
-                Console.WriteLine("Error: " + ex.Message);
-            }
+            Dispatcher.Invoke(() => _messageDisplay.DisplayMessage(message, false, ChatMessagesPanel, ChatScrollViewer));
         }
 
-        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        private void OnConnectionStatusChanged(string status)
         {
-            if (stream == null)
+            Dispatcher.Invoke(() => {
+                Console.WriteLine($"Connection Status: {status}");
+            });
+        }
+
+        private async void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_chat.IsConnected)
             {
-                MessageBox.Show("Not connected to the server.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+                    AppConstants.Messages.NOT_CONNECTED,
+                    AppConstants.Messages.ERROR_TITLE,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 return;
             }
 
             string message = MessageInput.Text.Trim();
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message) && message != AppConstants.UI.PLACEHOLDER_TEXT)
             {
-                string fullMessage = username + ": " + message; 
-                byte[] data = Encoding.ASCII.GetBytes(fullMessage);
                 try
                 {
-                    stream.Write(data, 0, data.Length);
-                    DisplayMessage("Me: " + message, "Right");
+                    await _chat.SendMessageAsync(message);
+                    _messageDisplay.DisplayMessage(
+                        AppConstants.UI.ME_PREFIX + message,
+                        true,
+                        ChatMessagesPanel,
+                        ChatScrollViewer);
                     MessageInput.Clear();
+                    MessageInput.Focus();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error sending message: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        ex.Message,
+                        AppConstants.Messages.ERROR_TITLE,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
         }
 
-        private void DisplayMessage(string message, string side)
-        {
-            TextBlock msgBlock = new TextBlock
-            {
-                Text = message,
-                FontSize = 18,
-                Padding = new Thickness(10),
-                Margin = new Thickness(side == "Right" ? 50 : 0, 5, side == "Left" ? 50 : 0, 5),
-                Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 400
-            };
-
-            ChatMessagesPanel.Children.Add(msgBlock);
-            ChatScrollViewer.ScrollToBottom();
-        }
-
         private void MessageInput_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (MessageInput.Text == "Type your message here...")
+            if (MessageInput.Text == AppConstants.UI.PLACEHOLDER_TEXT)
             {
                 MessageInput.Text = "";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Black;
+                MessageInput.Foreground = Brushes.Black;
             }
         }
 
@@ -122,9 +112,17 @@ namespace Client
         {
             if (string.IsNullOrWhiteSpace(MessageInput.Text))
             {
-                MessageInput.Text = "Type your message here...";
-                MessageInput.Foreground = System.Windows.Media.Brushes.Gray;
+                MessageInput.Text = AppConstants.UI.PLACEHOLDER_TEXT;
+                MessageInput.Foreground = Brushes.Gray;
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _chat?.Disconnect();
+            if (_chat is IDisposable disposable)
+                disposable.Dispose();
+            base.OnClosed(e);
         }
     }
 }
