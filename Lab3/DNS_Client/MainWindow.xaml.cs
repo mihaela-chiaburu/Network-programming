@@ -1,4 +1,8 @@
-﻿using DnsClient;
+﻿using DNS_Client.Constants;
+using DNS_Client.Interfaces;
+using DNS_Client.Models;
+using DNS_Client.Services;
+using DnsClient;
 using System;
 using System.Linq;
 using System.Net;
@@ -9,155 +13,141 @@ namespace DNS_Client
 {
     public partial class MainWindow : Window
     {
-        private string customDnsServer = null;
+        private readonly IDnsService _dnsService;
+        private readonly IOutputService _outputService;
 
-        public MainWindow()
+        public MainWindow() : this(
+            new DnsService(new DnsResolver(), new NetworkValidator()),
+            new OutputService())
+        {
+        }
+
+        public MainWindow(IDnsService dnsService, IOutputService outputService)
         {
             InitializeComponent();
+
+            _dnsService = dnsService ?? throw new ArgumentNullException(nameof(dnsService));
+            _outputService = outputService ?? throw new ArgumentNullException(nameof(outputService));
+
+            InitializeServices();
         }
 
-        private void ResolveButton_Click(object sender, RoutedEventArgs e)
+        private void InitializeServices()
+        {
+            _dnsService.OutputReceived += OnOutputReceived;
+            _dnsService.StatusChanged += OnStatusChanged;
+        }
+
+        private void OnOutputReceived(string output)
+        {
+            _outputService.AppendOutput(output, OutputTextBox);
+        }
+
+        private void OnStatusChanged(string status)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                Console.WriteLine($"DNS Status: {status}");
+            });
+        }
+
+        private async void ResolveButton_Click(object sender, RoutedEventArgs e)
         {
             string input = ResolveInputTextBox.Text.Trim();
-            if (string.IsNullOrWhiteSpace(input)) return;
-
-            string query = input.StartsWith("resolve ") ? input.Substring(8) : input;
-            ResolveDomainOrIp(query);
-        }
-
-        private void UseDnsButton_Click(object sender, RoutedEventArgs e)
-        {
-            string dns = DnsServerTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(dns))
+            if (string.IsNullOrWhiteSpace(input))
             {
-                AppendOutput("Introduceți o adresă DNS.");
+                _outputService.AppendError("Please enter a domain or IP address to resolve.", OutputTextBox);
                 return;
             }
 
-            ChangeDnsServer(dns);
-        }
-
-
-        private void ResolveDomainOrIp(string query)
-        {
             try
             {
-                if (IPAddress.TryParse(query, out IPAddress address))
+                ResolveButton.IsEnabled = false;
+
+                var result = await _dnsService.ResolveAsync(input);
+                DisplayDnsResult(result);
+            }
+            catch (Exception ex)
+            {
+                _outputService.AppendError($"{AppConstants.Messages.GENERAL_ERROR}{ex.Message}", OutputTextBox);
+            }
+            finally
+            {
+                ResolveButton.IsEnabled = true;
+            }
+        }
+
+        private async void UseDnsButton_Click(object sender, RoutedEventArgs e)
+        {
+            string dnsServer = DnsServerTextBox.Text.Trim();
+
+            try
+            {
+                UseDnsButton.IsEnabled = false;
+
+                bool success = await _dnsService.SetCustomDnsServerAsync(dnsServer);
+
+                if (success)
                 {
-                    string[] domains = GetHostByAddress(query);
-                    string result = domains.Length > 0 ? $"Domenii asociate cu {query}:\n{string.Join("\n", domains)}" : $"Nu s-au găsit domenii pentru IP-ul {query}.";
-                    AppendOutput(result);
-                }
-                else
-                {
-                    string[] addresses = GetIpByHost(query);
-                    string result = addresses.Length > 0 ? $"Adrese IP asociate cu {query}:\n{string.Join("\n", addresses)}" : $"Nu s-au găsit adrese IP pentru domeniul {query}.";
-                    AppendOutput(result);
+                    DnsServerTextBox.Clear();
                 }
             }
             catch (Exception ex)
             {
-                AppendOutput($"Eroare: {ex.Message}");
+                _outputService.AppendError($"{AppConstants.Messages.GENERAL_ERROR}{ex.Message}", OutputTextBox);
+            }
+            finally
+            {
+                UseDnsButton.IsEnabled = true;
             }
         }
 
-
-        private bool IsDnsServerReachable(string dnsServer)
+        private void DisplayDnsResult(DnsResult result)
         {
-            try
+            if (result.IsSuccess && result.Results.Length > 0)
             {
-                using (var ping = new System.Net.NetworkInformation.Ping())
-                {
-                    var reply = ping.Send(dnsServer, 2000);
-                    return reply.Status == System.Net.NetworkInformation.IPStatus.Success;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
+                string header = result.QueryType == DnsQueryType.Forward
+                    ? $"{AppConstants.Messages.IP_ADDRESSES_ASSOCIATED_WITH}{result.Query}:"
+                    : $"{AppConstants.Messages.DOMAINS_ASSOCIATED_WITH}{result.Query}:";
 
-        private void ChangeDnsServer(string dns)
-        {
-            if (IPAddress.TryParse(dns, out _))
-            {
-                if (IsDnsServerReachable(dns))
+                _outputService.AppendSuccess(header, OutputTextBox);
+
+                foreach (string resultItem in result.Results)
                 {
-                    customDnsServer = dns;
-                    AppendOutput($"Server DNS setat la: {dns}");
+                    _outputService.AppendOutput($"  • {resultItem}", OutputTextBox);
                 }
-                else
+
+                if (_dnsService.IsUsingCustomDns)
                 {
-                    AppendOutput("Serverul DNS nu este accesibil.");
+                    _outputService.AppendInfo($"(Using DNS server: {result.DnsServerUsed})", OutputTextBox);
                 }
             }
             else
             {
-                AppendOutput("Adresă DNS invalidă.");
+                string errorMessage = !string.IsNullOrEmpty(result.ErrorMessage)
+                    ? result.ErrorMessage
+                    : (result.QueryType == DnsQueryType.Forward
+                        ? $"{AppConstants.Messages.NO_IP_ADDRESSES_FOUND}{result.Query}."
+                        : $"{AppConstants.Messages.NO_DOMAINS_FOUND}{result.Query}.");
+
+                _outputService.AppendError(errorMessage, OutputTextBox);
             }
         }
 
-        private string[] GetIpByHost(string host)
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(customDnsServer))
-                {
-                    return Dns.GetHostAddresses(host).Select(ip => ip.ToString()).ToArray();
-                }
-                else
-                {
-                    return GetHostAddressesUsingCustomDns(host, customDnsServer);
-                }
-            }
-            catch (Exception ex)
-            {
-                return new string[] { $"Eroare la rezolvarea domeniului: {ex.Message}" };
-            }
+            _outputService.Clear(OutputTextBox);
         }
 
-        private string[] GetHostByAddress(string ip)
+        private void ResetDnsButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                IPHostEntry hostEntry = Dns.GetHostEntry(ip);
-                return hostEntry.Aliases.Concat(new[] { hostEntry.HostName }).ToArray();
-            }
-            catch (Exception ex)
-            {
-                AppendOutput($"Eroare la rezolvarea IP-ului: {ex.Message}");
-                return new string[0];
-            }
+            _dnsService.ClearCustomDnsServer();
+            _outputService.AppendInfo("DNS server reset to system default.", OutputTextBox);
         }
 
-        private static string[] GetHostAddressesUsingCustomDns(string host, string dnsServer)
+        protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                var endpoint = new IPEndPoint(IPAddress.Parse(dnsServer), 53);
-                var client = new LookupClient(endpoint);
-
-                var result = client.Query(host, QueryType.A);
-
-                if (result.HasError)
-                {
-                    return new string[] { $"Eroare DNS: {result.ErrorMessage}" };
-                }
-
-                return result.Answers.ARecords().Select(record => record.Address.ToString()).ToArray();
-            }
-            catch (Exception ex)
-            {
-                return new string[] { $"Eroare la rezolvarea DNS custom: {ex.Message}" };
-            }
-        }
-
-        private void AppendOutput(string text)
-        {
-            OutputTextBox.AppendText($"{text}\n");
-            OutputTextBox.ScrollToEnd();
+            base.OnClosed(e);
         }
     }
 }

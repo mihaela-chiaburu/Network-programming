@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\services\\messagedisplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\services\\messagedisplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\constants\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\constants\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\services\\messageparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\services\\messageparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\constants\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\constants\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\services\\messagedisplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|solutionrelative:client\\services\\messagedisplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8710FCA9-24C4-4B8D-87A6-7C56FD3174C9}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab2\\client\\client\\services\\udpchatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,43 +62,25 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MessageDisplayService.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageDisplayService.cs",
-              "RelativeDocumentMoniker": "Client\\Services\\MessageDisplayService.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageDisplayService.cs",
-              "RelativeToolTip": "Client\\Services\\MessageDisplayService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T19:59:01.96Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UdpChatService.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\UdpChatService.cs",
-              "RelativeDocumentMoniker": "Client\\Services\\UdpChatService.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\UdpChatService.cs",
-              "RelativeToolTip": "Client\\Services\\UdpChatService.cs",
-              "ViewState": "AgIAAIEAAAAAAAAAAAAIwFAAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T19:58:03.082Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "MessageParser.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageParser.cs",
               "RelativeDocumentMoniker": "Client\\Services\\MessageParser.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageParser.cs",
               "RelativeToolTip": "Client\\Services\\MessageParser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABWAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAvwA0AAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-21T19:55:52.862Z",
               "EditorCaption": ""
@@ -118,15 +100,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
+              "RelativeToolTip": "Client\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAgwIkAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T01:04:32.611Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "AppConstants.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Constants\\AppConstants.cs",
               "RelativeDocumentMoniker": "Client\\Constants\\AppConstants.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Constants\\AppConstants.cs",
               "RelativeToolTip": "Client\\Constants\\AppConstants.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAkwDgAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACIAAAAAAAAAAAAQwAgAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-21T19:54:30.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UdpChatService.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\UdpChatService.cs",
+              "RelativeDocumentMoniker": "Client\\Services\\UdpChatService.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\UdpChatService.cs",
+              "RelativeToolTip": "Client\\Services\\UdpChatService.cs",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAIwFAAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T19:58:03.082Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MessageDisplayService.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageDisplayService.cs",
+              "RelativeDocumentMoniker": "Client\\Services\\MessageDisplayService.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\Services\\MessageDisplayService.cs",
+              "RelativeToolTip": "Client\\Services\\MessageDisplayService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T19:59:01.96Z",
               "EditorCaption": ""
             },
             {
@@ -141,23 +162,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-21T19:53:37.747Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab2\\Client\\Client\\MainWindow.xaml.cs*",
-              "RelativeToolTip": "Client\\MainWindow.xaml.cs*",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAwwIkAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-24T01:04:32.611Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
