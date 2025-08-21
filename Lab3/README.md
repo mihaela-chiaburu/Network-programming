@@ -4,7 +4,7 @@ This is a DNS client application built with C# that allows users to resolve doma
 
 <p align="center">
     <kbd>
-        <img src="https://github.com/user-attachments/assets/e533aa75-0beb-4d82-8843-695069cf583d" alt="Interface of the app" style="border: 10px solid black; padding: 10px; max-width: 20%; height: 350px;">
+        <img width="990" height="561" alt="image" src="https://github.com/user-attachments/assets/6db44898-7091-4d69-9475-43a72a48a267" />
     </kbd>
     <p align="center"><em>Interface of the app</em></p>
 </p>
