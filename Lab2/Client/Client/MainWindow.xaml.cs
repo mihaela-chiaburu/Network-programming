@@ -1,160 +1,165 @@
-﻿using System;
+﻿using Client.Constants;
+using Client.Interfaces;
+using Client.Services;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Client
 {
     public partial class MainWindow : Window
     {
-        private UdpClient udpClient;
-        private const int Port = 9000;
-        private string clientIP;
-        private string clientUsername;
+        private readonly IUdpChatService _udpChatService;
+        private readonly IMessageDisplayService _messageDisplayService;
 
-        public MainWindow()
+        public MainWindow() : this(
+            new UdpChatService(new NetworkUtils(), new MessageParser()),
+            new MessageDisplayService())
+        {
+        }
+
+        public MainWindow(IUdpChatService udpChatService, IMessageDisplayService messageDisplayService)
         {
             InitializeComponent();
 
-            clientIP = GetRandomIpAddress();
-            clientUsername = $"User{new Random().Next(1000)}";
+            _udpChatService = udpChatService ?? throw new ArgumentNullException(nameof(udpChatService));
+            _messageDisplayService = messageDisplayService ?? throw new ArgumentNullException(nameof(messageDisplayService));
 
-            this.Title = $"Chat Client - {clientIP} ({clientUsername})";
-
-            udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(clientIP), Port));
-            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
-
-            StartReceiving();
+            InitializeServices();
+            InitializeUdpClient();
         }
 
-        private string GetRandomIpAddress()
+        private void InitializeServices()
         {
-            Random random = new Random();
-            int lastOctet = random.Next(2, 255);
-            return $"127.0.0.{lastOctet}";
+            _udpChatService.MessageReceived += OnMessageReceived;
+            _udpChatService.ConnectionStatusChanged += OnConnectionStatusChanged;
         }
 
-        private async void StartReceiving()
-        {
-            while (true)
-            {
-                try
-                {
-                    UdpReceiveResult result = await udpClient.ReceiveAsync();
-                    string message = Encoding.UTF8.GetString(result.Buffer);
-
-                    if (message.StartsWith("PRIVATE_FROM:"))
-                    {
-                        var parts = message.Substring("PRIVATE_FROM:".Length).Split(new[] { ':' }, 2);
-                        if (parts.Length == 2)
-                        {
-                            string senderInfo = parts[0].Trim();
-                            string privateMessage = parts[1].Trim();
-
-                            if (senderInfo == $"{clientIP} ({clientUsername})")
-                            {
-                                DisplayMessage($"Me: {privateMessage}", "Right");
-                            }
-                            else
-                            {
-                                DisplayMessage($"private message from {senderInfo}: {privateMessage}", "Left");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (message.StartsWith($"{clientIP} ({clientUsername}):"))
-                        {
-                            DisplayMessage($"Me: {message.Substring($"{clientIP} ({clientUsername}):".Length).Trim()}", "Right");
-                        }
-                        else
-                        {
-                            DisplayMessage(message, "Left");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error receiving message: {ex.Message}");
-                }
-            }
-        }
-
-        private void DisplayMessage(string message, string side)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                TextBlock msgBlock = new TextBlock
-                {
-                    Text = message,
-                    FontSize = 18,
-                    Padding = new Thickness(10),
-                    Margin = new Thickness(side == "Right" ? 50 : 20, 5, side == "Left" ? 0 : 20, 5),
-                    Background = (side == "Right") ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                    HorizontalAlignment = (side == "Right") ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                    TextWrapping = TextWrapping.Wrap,
-                    MaxWidth = 400
-                };
-
-                ChatMessagesPanel.Children.Add(msgBlock);
-
-                ChatScrollViewer.ScrollToBottom();
-            });
-        }
-
-        private void SendMessage_Click(object sender, RoutedEventArgs e)
-        {
-            string message = MessageInput.Text;
-            if (string.IsNullOrWhiteSpace(message)) return;
-
-            string fullMessage = $"{clientIP} ({clientUsername}): {message}";
-
-            if (message.StartsWith("private "))
-            {
-                var parts = message.Substring(8).Split(':');
-                if (parts.Length == 2)
-                {
-                    string userIp = parts[0].Trim();
-                    string userMessage = parts[1].Trim();
-
-                    DisplayMessage($"Me (to {userIp}): {userMessage}", "Right");
-                    SendMessage(userIp, $"PRIVATE_FROM:{clientIP} ({clientUsername}): {userMessage}");
-                }
-            }
-            else
-            {
-                SendMessage("255.255.255.255", fullMessage);
-            }
-
-            MessageInput.Clear();
-        }
-
-        private void SendMessage(string ip, string message)
+        private async void InitializeUdpClient()
         {
             try
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), Port);
-                udpClient.Send(buffer, buffer.Length, remoteEndPoint);
+                await _udpChatService.InitializeAsync();
+
+                this.Title = string.Format(
+                    AppConstants.Format.WINDOW_TITLE,
+                    _udpChatService.ClientIP,
+                    _udpChatService.ClientUsername);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending message: {ex.Message}");
+                MessageBox.Show(
+                    AppConstants.Messages.INITIALIZATION_ERROR + ex.Message,
+                    AppConstants.Titles.ERROR_TITLE,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
+        }
+
+        private void OnMessageReceived(string message, MessageType messageType)
+        {
+            Dispatcher.Invoke(() =>
+                _messageDisplayService.DisplayMessage(message, messageType, ChatMessagesPanel, ChatScrollViewer));
+        }
+
+        private void OnConnectionStatusChanged(string status)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                Console.WriteLine($"UDP Client Status: {status}");
+            });
+        }
+
+        private async void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            string message = MessageInput.Text.Trim();
+            if (string.IsNullOrWhiteSpace(message) || message == AppConstants.UI.PLACEHOLDER_TEXT)
+                return;
+
+            if (!_udpChatService.IsInitialized)
+            {
+                MessageBox.Show(
+                    "UDP client is not initialized.",
+                    AppConstants.Titles.ERROR_TITLE,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                if (message.StartsWith(AppConstants.Network.PRIVATE_COMMAND_PREFIX))
+                {
+                    await HandlePrivateMessage(message);
+                }
+                else
+                {
+                    await _udpChatService.SendBroadcastMessageAsync(message);
+                }
+
+                MessageInput.Clear();
+                MessageInput.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    AppConstants.Titles.ERROR_TITLE,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private async Task HandlePrivateMessage(string message)
+        {
+            var privateContent = message.Substring(AppConstants.Network.PRIVATE_COMMAND_PREFIX.Length);
+            var parts = privateContent.Split(new[] { AppConstants.Format.PRIVATE_MESSAGE_SEPARATOR }, 2);
+
+            if (parts.Length != 2)
+            {
+                throw new ArgumentException(AppConstants.Messages.PRIVATE_MESSAGE_FORMAT_ERROR);
+            }
+
+            string targetIp = parts[0].Trim();
+            string messageContent = parts[1].Trim();
+
+            if (string.IsNullOrWhiteSpace(targetIp) || string.IsNullOrWhiteSpace(messageContent))
+            {
+                throw new ArgumentException(AppConstants.Messages.PRIVATE_MESSAGE_FORMAT_ERROR);
+            }
+
+            string localDisplay = $"{AppConstants.UI.PRIVATE_TO_PREFIX}{targetIp}): {messageContent}";
+            _messageDisplayService.DisplayMessage(localDisplay, MessageType.PrivateSent, ChatMessagesPanel, ChatScrollViewer);
+
+            await _udpChatService.SendPrivateMessageAsync(targetIp, messageContent);
         }
 
         private void MessageInput_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (MessageInput.Text == "Type your message here...")
+            if (MessageInput.Text == AppConstants.UI.PLACEHOLDER_TEXT)
+            {
                 MessageInput.Text = string.Empty;
+                MessageInput.Foreground = Brushes.Black;
+            }
         }
 
         private void MessageInput_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(MessageInput.Text))
-                MessageInput.Text = "Type your message here...";
+            if (string.IsNullOrWhiteSpace(MessageInput.Text))
+            {
+                MessageInput.Text = AppConstants.UI.PLACEHOLDER_TEXT;
+                MessageInput.Foreground = Brushes.Gray;
+            }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _udpChatService?.Dispose();
+            base.OnClosed(e);
         }
     }
 }

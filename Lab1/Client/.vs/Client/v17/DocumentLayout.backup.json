@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -54,24 +50,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 7,
           "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Program.cs",
-              "RelativeDocumentMoniker": "Client\\Program.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Program.cs",
-              "RelativeToolTip": "Client\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:32:39.246Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml.cs",
               "RelativeDocumentMoniker": "Client\\App.xaml.cs",
@@ -84,7 +71,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "AssemblyInfo.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\AssemblyInfo.cs",
               "RelativeDocumentMoniker": "Client\\AssemblyInfo.cs",
@@ -97,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "App.xaml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml",
               "RelativeDocumentMoniker": "Client\\App.xaml",
@@ -109,7 +96,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "MessageDisplayService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Services\\MessageDisplayService.cs",
               "RelativeDocumentMoniker": "Client\\Services\\MessageDisplayService.cs",
@@ -122,7 +109,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "TcpChatService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Services\\TcpChatService.cs",
               "RelativeDocumentMoniker": "Client\\Services\\TcpChatService.cs",
@@ -135,7 +122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "AppConstants.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Constants\\AppConstants.cs",
               "RelativeDocumentMoniker": "Client\\Constants\\AppConstants.cs",
@@ -148,7 +135,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
@@ -161,7 +148,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "IMessageDisplay.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Interfaces\\IMessageDisplay.cs",
               "RelativeDocumentMoniker": "Client\\Interfaces\\IMessageDisplay.cs",
@@ -174,7 +161,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "IChat.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Interfaces\\IChat.cs",
               "RelativeDocumentMoniker": "Client\\Interfaces\\IChat.cs",
@@ -187,7 +174,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml",

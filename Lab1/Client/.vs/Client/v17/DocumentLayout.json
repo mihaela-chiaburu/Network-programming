@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\services\\tcpchatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\services\\tcpchatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|solutionrelative:client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8568099B-26B1-4619-A966-8271EA982C93}|Client\\Client.csproj|c:\\users\\user\\desktop\\pr\\lab1\\client\\client\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -54,62 +46,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Program.cs",
-              "RelativeDocumentMoniker": "Client\\Program.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Program.cs",
-              "RelativeToolTip": "Client\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:32:39.246Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\App.xaml.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml.cs",
-              "RelativeToolTip": "Client\\App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:28:44.538Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AssemblyInfo.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "Client\\AssemblyInfo.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\AssemblyInfo.cs",
-              "RelativeToolTip": "Client\\AssemblyInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:28:31.758Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml",
-              "RelativeDocumentMoniker": "Client\\App.xaml",
-              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml",
-              "RelativeToolTip": "Client\\App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T18:28:26.981Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "MessageDisplayService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Services\\MessageDisplayService.cs",
               "RelativeDocumentMoniker": "Client\\Services\\MessageDisplayService.cs",
@@ -117,12 +58,11 @@
               "RelativeToolTip": "Client\\Services\\MessageDisplayService.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAqwAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:27:20.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T18:27:20.629Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "TcpChatService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Services\\TcpChatService.cs",
               "RelativeDocumentMoniker": "Client\\Services\\TcpChatService.cs",
@@ -130,12 +70,11 @@
               "RelativeToolTip": "Client\\Services\\TcpChatService.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAGgAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:25:56.41Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T18:25:56.41Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
               "Title": "AppConstants.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Constants\\AppConstants.cs",
               "RelativeDocumentMoniker": "Client\\Constants\\AppConstants.cs",
@@ -143,12 +82,11 @@
               "RelativeToolTip": "Client\\Constants\\AppConstants.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:25:07.119Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T18:25:07.119Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
@@ -161,7 +99,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
               "Title": "IMessageDisplay.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Interfaces\\IMessageDisplay.cs",
               "RelativeDocumentMoniker": "Client\\Interfaces\\IMessageDisplay.cs",
@@ -169,12 +107,11 @@
               "RelativeToolTip": "Client\\Interfaces\\IMessageDisplay.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:24:10.514Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T18:24:10.514Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "IChat.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\Interfaces\\IChat.cs",
               "RelativeDocumentMoniker": "Client\\Interfaces\\IChat.cs",
@@ -182,20 +119,49 @@
               "RelativeToolTip": "Client\\Interfaces\\IChat.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T18:23:23.332Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T18:23:23.332Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml",
+              "RelativeDocumentMoniker": "Client\\App.xaml",
+              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\App.xaml",
+              "RelativeToolTip": "Client\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-08-21T18:28:26.981Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "Client\\AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\AssemblyInfo.cs",
+              "RelativeToolTip": "Client\\AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T18:28:31.758Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Client\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\user\\Desktop\\pr\\Lab1\\Client\\Client\\MainWindow.xaml",
               "RelativeToolTip": "Client\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-02-16T23:09:03.451Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-16T23:09:03.451Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
