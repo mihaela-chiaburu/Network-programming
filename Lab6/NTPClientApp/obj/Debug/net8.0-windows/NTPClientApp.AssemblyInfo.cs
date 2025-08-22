@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NTPClientApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+641d80fc21a5704bfbf93929487ec747429da404")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77386f5567457b1fabda55e7d22d5c3362834de0")]
 [assembly: System.Reflection.AssemblyProductAttribute("NTPClientApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NTPClientApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

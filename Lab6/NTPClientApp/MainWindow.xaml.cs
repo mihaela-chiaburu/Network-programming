@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NTPClientApp.Constants;
+using NTPClientApp.Interfaces;
+using NTPClientApp.Services;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,77 +11,134 @@ namespace NTPClientApp
 {
     public partial class MainWindow : Window
     {
+        private ITimeService _timeService;
+
         public MainWindow()
         {
             InitializeComponent();
+            InitializeServices();
         }
 
-        private void OnGetTimeClick(object sender, RoutedEventArgs e)
+        private void InitializeServices()
         {
-            string zone = ZoneTextBox.Text.Trim();
-            if (string.IsNullOrEmpty(zone) || !zone.StartsWith("GMT"))
+            var packetService = new NtpPacketService();
+            var ntpClient = new NtpClient(packetService);
+            var timeZoneService = new TimeZoneService();
+            _timeService = new TimeService(ntpClient, timeZoneService);
+        }
+
+        private async void OnGetTimeClick(object sender, RoutedEventArgs e)
+        {
+            string zone = ZoneTextBox.Text?.Trim();
+
+            if (string.IsNullOrEmpty(zone) || !zone.StartsWith(AppConstants.TimeZone.GMT_PREFIX))
             {
-                TimeLabel.Content = "Introduceti o zona valida (ex: GMT+2)";
+                DisplayError(AppConstants.Messages.ENTER_VALID_ZONE);
                 return;
             }
 
+            await GetAndDisplayTime(zone);
+        }
+
+        private async Task GetAndDisplayTime(string zone)
+        {
             try
             {
-                // ora de la un server NTP public
-                DateTime utcNow = GetNetworkTime();
-                int offset = GetOffsetFromZone(zone);
-                DateTime localTime = utcNow.AddHours(offset);
+                UpdateStatus(AppConstants.Messages.CONNECTING_TO_SERVER);
+                DisableControls();
 
-                TimeLabel.Content = $"Ora exactă în {zone}: {localTime:HH:mm:ss}";
+                var result = await _timeService.GetTimeForZoneAsync(zone);
+
+                if (result.IsSuccessful)
+                {
+                    DisplayTimeResult(result);
+                    UpdateStatus(AppConstants.Messages.TIME_UPDATED);
+                }
+                else
+                {
+                    DisplayError(result.ErrorMessage);
+                }
             }
             catch (Exception ex)
             {
-                TimeLabel.Content = $"Eroare: {ex.Message}";
+                DisplayError(ex.Message);
+            }
+            finally
+            {
+                EnableControls();
             }
         }
 
-        private DateTime GetNetworkTime()
+        private void DisplayTimeResult(Models.TimeResult result)
         {
-            string ntpServer = "time.windows.com";
-            byte[] ntpData = new byte[48];
-            ntpData[0] = 0x1B; 
+            var message = string.Format(
+                AppConstants.Messages.EXACT_TIME_FORMAT,
+                result.TimeZone.ZoneIdentifier,
+                result.LocalTime);
 
-            var addresses = Dns.GetHostEntry(ntpServer).AddressList;
-            IPEndPoint endPoint = new IPEndPoint(addresses[0], 123); // NTP port 
+            TimeLabel.Content = message;
 
-            using (UdpClient udpClient = new UdpClient())
+            if (result.RoundTripTime.TotalMilliseconds > 0)
             {
-                udpClient.Client.ReceiveTimeout = 3000; 
-
-                udpClient.Send(ntpData, ntpData.Length, endPoint);
-
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                ntpData = udpClient.Receive(ref remoteEndPoint);
+                var additionalInfo = $"\nServer: {result.ServerName}\nRound-trip: {result.RoundTripTime.TotalMilliseconds:F0}ms";
             }
-
-            if (ntpData.Length < 48)
-                throw new Exception("Răspuns NTP incomplet");
-
-            // Extract and convert timestamp
-            uint seconds = BitConverter.ToUInt32(ntpData, 40);
-            if (BitConverter.IsLittleEndian)
-            {
-                seconds = (uint)IPAddress.NetworkToHostOrder((int)seconds);
-            }
-
-            DateTime ntpEpoch = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return ntpEpoch.AddSeconds(seconds).ToUniversalTime();
         }
 
-        private int GetOffsetFromZone(string zone)
+        private void DisplayError(string errorMessage)
         {
-            // valoarea numerică din zona GMT
-            if (zone.StartsWith("GMT+"))
-                return int.Parse(zone.Substring(4));
-            if (zone.StartsWith("GMT-"))
-                return -int.Parse(zone.Substring(4));
+            TimeLabel.Content = string.Format(AppConstants.Messages.ERROR_FORMAT, errorMessage);
+        }
 
-            throw new ArgumentException("Formatul zonei este invalid.");
+        private void UpdateStatus(string message)
+        {
+            // --
+        }
+
+        private void DisableControls()
+        {
+            ZoneTextBox.IsEnabled = false;
+            GetTimeButton.IsEnabled = false;
+        }
+
+        private void EnableControls()
+        {
+            ZoneTextBox.IsEnabled = true;
+            GetTimeButton.IsEnabled = true;
+        }
+
+        private async void OnRefreshClick(object sender, RoutedEventArgs e)
+        {
+            string zone = ZoneTextBox.Text?.Trim();
+            if (!string.IsNullOrEmpty(zone))
+            {
+                await GetAndDisplayTime(zone);
+            }
+        }
+
+        private void OnZoneTextBoxKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                OnGetTimeClick(sender, e);
+            }
+        }
+
+        private async void OnGMTClick(object sender, RoutedEventArgs e)
+        {
+            ZoneTextBox.Text = "GMT";
+            await GetAndDisplayTime("GMT");
+        }
+
+        private async void OnGMTPlus2Click(object sender, RoutedEventArgs e)
+        {
+            ZoneTextBox.Text = "GMT+2";
+            await GetAndDisplayTime("GMT+2");
+        }
+
+        private async void OnGMTMinus5Click(object sender, RoutedEventArgs e)
+        {
+            ZoneTextBox.Text = "GMT-5";
+            await GetAndDisplayTime("GMT-5");
         }
     }
 }

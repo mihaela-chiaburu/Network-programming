@@ -4,8 +4,17 @@
         Title="NTP Client" Height="250" Width="400">
     <Grid>
         <Label Content="Introdu zona geografică (ex: GMT+2)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
-        <TextBox x:Name="ZoneTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" Width="150"/>
-        <Button Content="Obține Ora" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,40,0,0" Width="100" Click="OnGetTimeClick"/>
+        <TextBox x:Name="ZoneTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" Width="150" KeyDown="OnZoneTextBoxKeyDown"/>
+        <Button x:Name="GetTimeButton" Content="Obține Ora" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,40,0,0" Width="100" Click="OnGetTimeClick"/>
         <Label x:Name="TimeLabel" Content="Ora exactă va apărea aici" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0" Width="350"/>
+
+        <Label x:Name="StatusLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,110,0,0" Width="350" FontSize="10" Foreground="Gray"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,140,0,0">
+            <Button x:Name="GMTButton" Content="GMT" Width="50" Height="25" Margin="0,0,5,0" Click="OnGMTClick"/>
+            <Button x:Name="GMT2Button" Content="GMT+2" Width="50" Height="25" Margin="0,0,5,0" Click="OnGMTPlus2Click"/>
+            <Button x:Name="GMT5Button" Content="GMT-5" Width="50" Height="25" Margin="0,0,5,0" Click="OnGMTMinus5Click"/>
+            <Button x:Name="RefreshButton" Content="Refresh" Width="60" Height="25" Margin="0,0,5,0" Click="OnRefreshClick"/>
+        </StackPanel>
     </Grid>
 </Window>
