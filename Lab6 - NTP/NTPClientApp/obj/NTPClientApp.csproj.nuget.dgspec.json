@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Desktop\\pr\\Lab6\\NTPClientApp\\NTPClientApp.csproj": {}
+    "C:\\Users\\user\\Desktop\\pr\\Lab6 - NTP\\NTPClientApp\\NTPClientApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Desktop\\pr\\Lab6\\NTPClientApp\\NTPClientApp.csproj": {
+    "C:\\Users\\user\\Desktop\\pr\\Lab6 - NTP\\NTPClientApp\\NTPClientApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Desktop\\pr\\Lab6\\NTPClientApp\\NTPClientApp.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\pr\\Lab6 - NTP\\NTPClientApp\\NTPClientApp.csproj",
         "projectName": "NTPClientApp",
-        "projectPath": "C:\\Users\\user\\Desktop\\pr\\Lab6\\NTPClientApp\\NTPClientApp.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\pr\\Lab6 - NTP\\NTPClientApp\\NTPClientApp.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Desktop\\pr\\Lab6\\NTPClientApp\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\pr\\Lab6 - NTP\\NTPClientApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
