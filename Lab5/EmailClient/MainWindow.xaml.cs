@@ -1,313 +1,263 @@
-﻿using System;
+﻿using EmailClient.Constants;
+using EmailClient.Interfaces;
+using EmailClient.Models;
+using EmailClient.Services;
+using MimeKit;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Windows;
-using MailKit;
-using MailKit.Net.Imap;
-using MailKit.Net.Pop3;
-using MailKit.Search;
-using MimeKit;
-using Attachment = System.Net.Mail.Attachment;
+using System.Windows.Controls;
 
 namespace EmailClient
 {
     public partial class MainWindow : Window
     {
-        private List<MimeMessage> emailMessages = new List<MimeMessage>();
-        private List<string> attachments = new List<string>();
+        private IEmailSendingService _emailSendingService;
+        private IAttachmentService _attachmentService;
+        private IEmailContentService _emailContentService;
+
+        private List<MimeMessage> _emailMessages = new List<MimeMessage>();
+        private List<string> _attachments = new List<string>();
 
         public MainWindow()
         {
             InitializeComponent();
+            InitializeServices();
         }
 
+        private void InitializeServices()
+        {
+            _emailSendingService = new SmtpEmailService();
+            _attachmentService = new AttachmentService();
+            _emailContentService = new EmailContentService();
+        }
+
+        // ---- UI ----
         private void ComposeButton_Click(object sender, RoutedEventArgs e)
         {
-            emailsListView.Visibility = Visibility.Collapsed;
-            emailContentGrid.Visibility = Visibility.Collapsed;
-            composeEmailGrid.Visibility = Visibility.Visible;
-
+            ShowComposeView();
             replyToTextBox.Text = emailTextBox.Text;
         }
 
-        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        private void CloseEmailButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(emailTextBox.Text) || string.IsNullOrEmpty(passwordBox.Password))
-            {
-                MessageBox.Show("Please enter your email and password");
-                return;
-            }
-
-            try
-            {
-                statusTextBlock.Text = "Connecting to server...";
-
-                emailMessages.Clear();
-                emailsListView.ItemsSource = null;
-
-                if (pop3Radio.IsChecked == true)
-                {
-                    await LoadEmailsViaPop3();
-                }
-                else
-                {
-                    await LoadEmailsViaImap();
-                }
-
-                var emailList = emailMessages.Select(m => new
-                {
-                    From = m.From.ToString(),
-                    Subject = m.Subject,
-                    Date = m.Date.LocalDateTime.ToString("g"),
-                    Message = m
-                }).ToList();
-
-                emailsListView.ItemsSource = emailList;
-                emailsListView.Visibility = Visibility.Visible;
-                emailContentGrid.Visibility = Visibility.Collapsed;
-                composeEmailGrid.Visibility = Visibility.Collapsed;
-
-                statusTextBlock.Text = $"Loaded {emailMessages.Count} emails";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading emails: {ex.Message}");
-                statusTextBlock.Text = "Error loading emails";
-            }
+            ShowEmailListView();
         }
 
-        private async Task LoadEmailsViaPop3()
+        private void CancelComposeButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var client = new Pop3Client())
-            {
-                await client.ConnectAsync(pop3ServerTextBox.Text, int.Parse(pop3PortTextBox.Text), true);
-                await client.AuthenticateAsync(emailTextBox.Text, passwordBox.Password);
-
-                for (int i = 0; i < client.Count; i++)
-                {
-                    var message = await client.GetMessageAsync(i);
-                    emailMessages.Add(message);
-                }
-
-                await client.DisconnectAsync(true);
-            }
+            ShowEmailListView();
+            ClearComposeForm();
         }
 
-        private async Task LoadEmailsViaImap()
+        private void ShowEmailListView()
         {
-            using (var client = new ImapClient())
-            {
-                await client.ConnectAsync(imapServerTextBox.Text, int.Parse(imapPortTextBox.Text), true);
-                await client.AuthenticateAsync(emailTextBox.Text, passwordBox.Password);
-
-                var inbox = client.Inbox;
-                await inbox.OpenAsync(FolderAccess.ReadOnly);
-
-                // doar ultimele 15 email-uri 
-                var count = Math.Min(inbox.Count, 15); 
-                var uids = await inbox.SearchAsync(SearchQuery.All);
-                var latestUids = uids.TakeLast(count).Reverse().ToList(); 
-
-                emailMessages.Clear();
-
-                foreach (var uid in latestUids)
-                {
-                    var message = await inbox.GetMessageAsync(uid);
-                    emailMessages.Add(message);
-                }
-
-                await client.DisconnectAsync(true);
-            }
+            emailsListView.Visibility = Visibility.Visible;
+            emailContentGrid.Visibility = Visibility.Collapsed;
+            composeEmailGrid.Visibility = Visibility.Collapsed;
         }
 
-        private void EmailsListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ShowEmailContentView()
         {
-            if (emailsListView.SelectedItem == null) return;
-
-            dynamic selectedItem = emailsListView.SelectedItem;
-            var selectedMessage = (MimeMessage)selectedItem.Message;
-
-            // Display email
-            emailContentGrid.DataContext = new
-            {
-                SelectedEmail = new
-                {
-                    From = selectedMessage.From.ToString(),
-                    Subject = selectedMessage.Subject,
-                    Date = selectedMessage.Date.LocalDateTime.ToString("g")
-                }
-            };
-
-            // Display HTML
-            var html = selectedMessage.HtmlBody;
-            if (!string.IsNullOrEmpty(html))
-            {
-                emailWebBrowser.NavigateToString(html);
-            }
-            else
-            {
-                emailWebBrowser.NavigateToString($"<pre>{selectedMessage.TextBody}</pre>");
-            }
-
             emailsListView.Visibility = Visibility.Collapsed;
             emailContentGrid.Visibility = Visibility.Visible;
             composeEmailGrid.Visibility = Visibility.Collapsed;
         }
 
-        private void CloseEmailButton_Click(object sender, RoutedEventArgs e)
+        private void ShowComposeView()
         {
-            emailsListView.Visibility = Visibility.Visible;
+            emailsListView.Visibility = Visibility.Collapsed;
             emailContentGrid.Visibility = Visibility.Collapsed;
-            composeEmailGrid.Visibility = Visibility.Collapsed;
+            composeEmailGrid.Visibility = Visibility.Visible;
         }
 
-        private void AddAttachment_Click(object sender, RoutedEventArgs e)
+        // ---- EMAIL LOADING ----
+        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            if (dialog.ShowDialog() == true)
-            {
-                attachments.Add(dialog.FileName);
-                statusTextBlock.Text = $"Added attachment: {Path.GetFileName(dialog.FileName)}";
-            }
-        }
+            var connectionInfo = GetConnectionInfo();
+            if (connectionInfo == null) return;
 
-        private void SendButton_Click(object sender, RoutedEventArgs e)
-        {
             try
             {
-                statusTextBlock.Text = "Sending email...";
-
-                var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                {
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(emailTextBox.Text, passwordBox.Password)
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(emailTextBox.Text),
-                    Subject = subjectTextBox.Text,
-                    Body = bodyTextBox.Text,
-                    IsBodyHtml = false
-                };
-
-                if (!string.IsNullOrEmpty(replyToTextBox.Text))
-                {
-                    mailMessage.ReplyToList.Add(new MailAddress(replyToTextBox.Text));
-                }
-
-                mailMessage.To.Add(toTextBox.Text);
-
-                foreach (var attachmentPath in attachments)
-                {
-                    if (File.Exists(attachmentPath))
-                    {
-                        var attachment = new Attachment(attachmentPath);
-                        mailMessage.Attachments.Add(attachment);
-                    }
-                }
-
-                smtpClient.Send(mailMessage);
-
-                toTextBox.Clear();
-                subjectTextBox.Clear();
-                bodyTextBox.Clear();
-                attachments.Clear();
-
-                emailsListView.Visibility = Visibility.Visible;
-                emailContentGrid.Visibility = Visibility.Collapsed;
-                composeEmailGrid.Visibility = Visibility.Collapsed;
-
-                statusTextBlock.Text = "Email sent successfully";
+                UpdateStatus(AppConstants.Messages.CONNECTING_TO_SERVER);
+                await LoadEmails(connectionInfo);
+                DisplayEmailList();
+                UpdateStatus(string.Format(AppConstants.Messages.LOADED_EMAILS_COUNT, _emailMessages.Count));
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending email: {ex.Message}\n\nMake sure you've enabled 'Less secure app access' or created an App Password in your Google account settings.");
-                statusTextBlock.Text = "Error sending email";
+                ShowErrorMessage(string.Format(AppConstants.Messages.ERROR_LOADING_EMAILS, ex.Message));
+                UpdateStatus(AppConstants.Messages.ERROR_LOADING_EMAILS_STATUS);
             }
         }
 
-        private void CancelComposeButton_Click(object sender, RoutedEventArgs e)
+        private async Task LoadEmails(EmailConnectionInfo connectionInfo)
         {
-            emailsListView.Visibility = Visibility.Visible;
-            emailContentGrid.Visibility = Visibility.Collapsed;
-            composeEmailGrid.Visibility = Visibility.Collapsed;
+            _emailMessages.Clear();
+            emailsListView.ItemsSource = null;
 
-            toTextBox.Clear();
-            subjectTextBox.Clear();
-            bodyTextBox.Clear();
-            attachments.Clear();
+            var emailRetrievalService = EmailServiceFactory.CreateEmailRetrievalService(connectionInfo);
+            _emailMessages = await emailRetrievalService.LoadEmailsAsync(connectionInfo);
         }
 
+        private void DisplayEmailList()
+        {
+            var emailList = _emailMessages.Select(m => new EmailMessage(m)).ToList();
+            emailsListView.ItemsSource = emailList;
+            ShowEmailListView();
+        }
+
+        // ---- EMAIL DISPLAY ----
+        private void EmailsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (emailsListView.SelectedItem == null) return;
+
+            var selectedEmail = (EmailMessage)emailsListView.SelectedItem;
+            var displayInfo = _emailContentService.PrepareEmailForDisplay(selectedEmail.Message);
+
+            DisplayEmailContent(displayInfo);
+            ShowEmailContentView();
+        }
+
+        private void DisplayEmailContent(EmailDisplayInfo displayInfo)
+        {
+            emailContentGrid.DataContext = new
+            {
+                SelectedEmail = new
+                {
+                    From = displayInfo.From,
+                    Subject = displayInfo.Subject,
+                    Date = displayInfo.Date
+                }
+            };
+
+            emailWebBrowser.NavigateToString(displayInfo.HtmlContent);
+        }
+
+        // ---- EMAIL COMPOSITION ----
         private void ReplyButton_Click(object sender, RoutedEventArgs e)
         {
             if (emailsListView.SelectedItem == null) return;
 
-            dynamic selectedItem = emailsListView.SelectedItem;
-            var selectedMessage = (MimeMessage)selectedItem.Message;
+            var selectedEmail = (EmailMessage)emailsListView.SelectedItem;
+            var replyData = _emailContentService.PrepareReplyData(selectedEmail.Message, emailTextBox.Text);
 
-            emailsListView.Visibility = Visibility.Collapsed;
-            emailContentGrid.Visibility = Visibility.Collapsed;
-            composeEmailGrid.Visibility = Visibility.Visible;
-
-            // Pre-fill reply
-            toTextBox.Text = selectedMessage.From.ToString();
-            subjectTextBox.Text = $"Re: {selectedMessage.Subject}";
-            replyToTextBox.Text = emailTextBox.Text;
-            bodyTextBox.Text = $"\n\n---------- Original Message ----------\n{selectedMessage.TextBody}";
+            PopulateComposeForm(replyData);
+            ShowComposeView();
         }
 
-        private void DownloadAttachments_Click(object sender, RoutedEventArgs e)
+        private void PopulateComposeForm(ComposeEmailData composeData)
+        {
+            toTextBox.Text = composeData.To;
+            subjectTextBox.Text = composeData.Subject;
+            replyToTextBox.Text = composeData.ReplyTo;
+            bodyTextBox.Text = composeData.Body;
+        }
+
+        private async void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            var connectionInfo = GetConnectionInfo();
+            var emailData = GetComposeEmailData();
+
+            if (connectionInfo == null || emailData == null) return;
+
+            try
+            {
+                UpdateStatus(AppConstants.Messages.SENDING_EMAIL);
+                await _emailSendingService.SendEmailAsync(connectionInfo, emailData);
+
+                ClearComposeForm();
+                ShowEmailListView();
+                UpdateStatus(AppConstants.Messages.EMAIL_SENT_SUCCESS);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMessage(string.Format(AppConstants.Messages.ERROR_SENDING_EMAIL, ex.Message));
+                UpdateStatus(AppConstants.Messages.ERROR_SENDING_EMAIL_STATUS);
+            }
+        }
+
+        // ---- ATTACHMENTS ----
+        private async void AddAttachment_Click(object sender, RoutedEventArgs e)
+        {
+            var filePath = await _attachmentService.SelectAttachmentAsync();
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                _attachments.Add(filePath);
+                UpdateStatus(string.Format(AppConstants.Messages.ADDED_ATTACHMENT, Path.GetFileName(filePath)));
+            }
+        }
+
+        private async void DownloadAttachments_Click(object sender, RoutedEventArgs e)
         {
             if (emailsListView.SelectedItem == null) return;
 
-            dynamic selectedItem = emailsListView.SelectedItem;
-            var selectedMessage = (MimeMessage)selectedItem.Message;
+            var selectedEmail = (EmailMessage)emailsListView.SelectedItem;
+            var folderPath = await _attachmentService.SelectDownloadFolderAsync();
 
-            // Create a SaveFileDialog to get a folder path
-            var dialog = new Microsoft.Win32.SaveFileDialog
+            if (!string.IsNullOrEmpty(folderPath))
             {
-                Title = "Select folder to save attachments",
-                FileName = "SelectFolder",
-                Filter = "Folders|*.thisisnotafile",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                CheckFileExists = false,
-                CheckPathExists = true
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                string folderPath = Path.GetDirectoryName(dialog.FileName);
-                int count = 0;
-
-                foreach (var attachment in selectedMessage.Attachments)
-                {
-                    var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
-                    var filePath = Path.Combine(folderPath, fileName);
-
-                    using (var stream = File.Create(filePath))
-                    {
-                        if (attachment is MimePart part)
-                        {
-                            part.Content.DecodeTo(stream);
-                        }
-                        else
-                        {
-                            var rfc822 = (MessagePart)attachment;
-                            rfc822.Message.WriteTo(stream);
-                        }
-                    }
-                    count++;
-                }
-
-                statusTextBlock.Text = $"Downloaded {count} attachments";
+                var count = await _attachmentService.DownloadAttachmentsAsync(selectedEmail.Message, folderPath);
+                UpdateStatus(string.Format(AppConstants.Messages.DOWNLOADED_ATTACHMENTS_COUNT, count));
             }
+        }
+
+        private EmailConnectionInfo GetConnectionInfo()
+        {
+            if (string.IsNullOrEmpty(emailTextBox.Text) || string.IsNullOrEmpty(passwordBox.Password))
+            {
+                ShowWarningMessage(AppConstants.Messages.ENTER_EMAIL_PASSWORD);
+                return null;
+            }
+
+            return new EmailConnectionInfo
+            {
+                Email = emailTextBox.Text,
+                Password = passwordBox.Password,
+                ImapServer = imapServerTextBox.Text,
+                ImapPort = int.Parse(imapPortTextBox.Text),
+                Pop3Server = pop3ServerTextBox.Text,
+                Pop3Port = int.Parse(pop3PortTextBox.Text),
+                UseImap = imapRadio.IsChecked == true
+            };
+        }
+
+        private ComposeEmailData GetComposeEmailData()
+        {
+            return new ComposeEmailData
+            {
+                To = toTextBox.Text,
+                Subject = subjectTextBox.Text,
+                Body = bodyTextBox.Text,
+                ReplyTo = replyToTextBox.Text,
+                Attachments = new List<string>(_attachments)
+            };
+        }
+
+        private void ClearComposeForm()
+        {
+            toTextBox.Clear();
+            subjectTextBox.Clear();
+            bodyTextBox.Clear();
+            _attachments.Clear();
+        }
+
+        private void UpdateStatus(string message)
+        {
+            statusTextBlock.Text = message;
+        }
+
+        private void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void ShowWarningMessage(string message)
+        {
+            MessageBox.Show(message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

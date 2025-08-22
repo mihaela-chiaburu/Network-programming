@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab5\\EmailClient\\EmailClient.csproj": {}
+    "C:\\Users\\user\\Desktop\\pr\\Lab5\\EmailClient\\EmailClient.csproj": {}
   },
   "projects": {
-    "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab5\\EmailClient\\EmailClient.csproj": {
+    "C:\\Users\\user\\Desktop\\pr\\Lab5\\EmailClient\\EmailClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab5\\EmailClient\\EmailClient.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\pr\\Lab5\\EmailClient\\EmailClient.csproj",
         "projectName": "EmailClient",
-        "projectPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab5\\EmailClient\\EmailClient.csproj",
-        "packagesPath": "C:\\Users\\filth\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\filth\\Desktop\\an3sem2\\pr\\Lab5\\EmailClient\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\pr\\Lab5\\EmailClient\\EmailClient.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\pr\\Lab5\\EmailClient\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\filth\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -40,7 +43,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -74,7 +78,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
